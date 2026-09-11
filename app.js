@@ -1,5 +1,12 @@
 const cfg=window.WHENG_CONFIG||{};
-document.querySelectorAll('a[data-phone-link]').forEach(el=>el.href=`tel:${cfg.phoneTel||''}`);
+const phoneTel=String(cfg.phoneTel||'').replace(/[^0-9+]/g,'');
+document.querySelectorAll('a[data-phone-link]').forEach(el=>{
+  if(phoneTel && phoneTel!=='01000000000') el.href=`tel:${phoneTel}`;
+  else {
+    el.href='#quote';
+    el.addEventListener('click',e=>{e.preventDefault();openQuote();const note=document.getElementById('formNote');note.textContent='전화 상담 준비 중입니다. 견적을 남겨주시면 연락드리겠습니다.';note.className='form-note';});
+  }
+});
 const mode=document.getElementById('siteMode');
 if(mode)mode.textContent=window.WHENG_DATA?.mode==='supabase'?'실시간 접수 운영':'데모 모드';
 
@@ -12,7 +19,7 @@ document.querySelectorAll('[data-scroll]').forEach(btn=>btn.addEventListener('cl
 }));
 
 const modal=document.getElementById('quoteModal');
-function openQuote(){modal?.classList.remove('hidden');document.body.style.overflow='hidden'}
+function openQuote(){modal?.classList.remove('hidden');document.body.style.overflow='hidden';modal?.querySelector('input[name="area"]')?.focus()}
 function closeQuote(){modal?.classList.add('hidden');document.body.style.overflow=''}
 document.querySelectorAll('[data-open-quote]').forEach(el=>el.addEventListener('click',openQuote));
 document.querySelectorAll('[data-close-quote]').forEach(el=>el.addEventListener('click',closeQuote));
@@ -25,7 +32,7 @@ photoInput?.addEventListener('change',()=>{
   photoPreview.innerHTML='';
   files.forEach(file=>{
     const el=document.createElement('div');el.className='preview-item';
-    const img=document.createElement('img');img.alt='첨부 미리보기';img.src=URL.createObjectURL(file);
+    const img=document.createElement('img');img.alt='첨부 미리보기';img.src=URL.createObjectURL(file);img.onload=()=>URL.revokeObjectURL(img.src);
     el.appendChild(img);photoPreview.appendChild(el);
   });
   if(photoInput.files.length>5)alert('사진은 최대 5장까지 접수됩니다.');

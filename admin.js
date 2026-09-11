@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const fmtDate=s=>s?new Date(s).toLocaleString('ko-KR'):'-';
+const adminEmail=window.WHENG_CONFIG?.adminEmail||'admin@wheng.local';
 let quotes=[],services=[],cases=[];
 
 async function init(){
@@ -8,7 +9,6 @@ async function init(){
   if(WHENG_DATA.mode==='supabase'){
     $('#demoNote').classList.add('hidden');
     $('#setupToggle').classList.remove('hidden');
-    $('#loginForm [name="email"]').value='';
     $('#loginForm [name="password"]').value='';
   }
   const session=await WHENG_DATA.getSession(); if(session) showApp(); else showLogin();
@@ -23,7 +23,7 @@ $('#setupForm')?.addEventListener('submit',async e=>{
   const msg=$('#setupMsg'); const fd=new FormData(e.currentTarget);
   msg.textContent='관리자 계정 설정 중...'; msg.className='muted';
   try{
-    const result=await WHENG_DATA.bootstrapAdmin(fd.get('email'),fd.get('password'),fd.get('token'));
+    const result=await WHENG_DATA.bootstrapAdmin(adminEmail,fd.get('password'),fd.get('token'));
     if(result.needsEmailConfirmation){
       msg.textContent='확인 메일을 보냈습니다. 이메일 인증 후 같은 정보로 다시 관리자 설정을 실행하세요.';
       msg.className='muted'; return;
@@ -35,7 +35,7 @@ $('#setupForm')?.addEventListener('submit',async e=>{
 });
 $('#loginForm').addEventListener('submit',async e=>{
   e.preventDefault(); const msg=$('#loginMsg'); const fd=new FormData(e.currentTarget); msg.textContent='로그인 확인 중...'; msg.className='muted';
-  try{ await WHENG_DATA.signIn(fd.get('email'),fd.get('password')); if(WHENG_DATA.mode==='demo')WHENG_DATA.setDemoSession(); await showApp(); }
+  try{ await WHENG_DATA.signIn(adminEmail,fd.get('password')); if(WHENG_DATA.mode==='demo')WHENG_DATA.setDemoSession(); await showApp(); }
   catch(err){msg.textContent=err.message;msg.className='error'}
 });
 $('#logoutBtn').addEventListener('click',async()=>{await WHENG_DATA.signOut();showLogin()});
@@ -110,4 +110,4 @@ function renderSystem(){
   $('#systemConfig').textContent=WHENG_DATA.mode==='supabase'?'운영 접수 가능':'WHENG 전용 Supabase URL·Publishable Key를 config.js에 입력하면 실시간 DB로 전환됩니다.';
 }
 $('#refreshBtn').onclick=refreshAll;
-init();
+init().catch(()=>{showLogin();$('#loginMsg').textContent='로그인 상태를 확인하지 못했습니다. 다시 로그인해주세요.';$('#loginMsg').className='error';});
