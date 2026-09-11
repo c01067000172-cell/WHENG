@@ -14,18 +14,14 @@ function iconFor(name=''){
 
 async function renderServices(){
   const grid=document.getElementById('serviceGrid'); if(!grid)return;
-  try{
-    const rows=await WHENG_DATA.getServices();
-    const wanted=[
-      rows.find(x=>x.name.includes('수전')),
-      rows.find(x=>x.name.includes('변기')&&!x.name.includes('누수')),
-      rows.find(x=>x.name.includes('세면')),
-      rows.find(x=>x.name.includes('배관')||x.name.includes('누수')),
-      rows.find(x=>x.name.includes('부분')||x.name.includes('설비'))
-    ].filter(Boolean);
-    const display=(wanted.length>=4?wanted:rows).slice(0,5);
-    grid.innerHTML=display.map(x=>`<article class="service-card"><div class="service-icon">${iconFor(x.name)}</div><h3>${esc(x.name.replace('싱크대·세면대 ','').replace(' 수리·교체',' 교체'))}</h3><small>${esc(x.price_text||'상담 후 안내')}</small></article>`).join('');
-  }catch(e){ console.error(e); }
+  const fixed=[
+    {name:'수전 교체',icon:'🚰'},
+    {name:'변기 교체',icon:'🚽'},
+    {name:'세면대 교체',icon:'🧼'},
+    {name:'배관·누수',icon:'🔧'},
+    {name:'각종 설비',icon:'🛠️'}
+  ];
+  grid.innerHTML=fixed.map(x=>`<article class="service-card"><div class="service-icon">${x.icon}</div><h3>${x.name}</h3></article>`).join('');
 }
 
 async function renderCases(){
@@ -37,7 +33,7 @@ async function renderCases(){
       grid.innerHTML=fallback.map(([t,i])=>`<article class="mini-case"><div class="mini-case-photo">${i}</div><b>${t}</b><span>AFTER</span></article>`).join('');
       return;
     }
-    grid.innerHTML=rows.slice(0,4).map((x,i)=>`<article class="mini-case"><div class="mini-case-photo ${x.image_url?'has-image':''}" ${x.image_url?`style="background-image:url('${esc(x.image_url)}')"`:''}>${x.image_url?'':iconFor(x.title)}</div><b>${esc(x.title)}</b><span>AFTER</span></article>`).join('');
+    grid.innerHTML=rows.slice(0,4).map(x=>`<article class="mini-case"><div class="mini-case-photo ${x.image_url?'has-image':''}" ${x.image_url?`style="background-image:url('${esc(x.image_url)}')"`:''}>${x.image_url?'':iconFor(x.title)}</div><b>${esc(x.title)}</b><span>AFTER</span></article>`).join('');
   }catch(e){ console.error(e); }
 }
 
