@@ -3,60 +3,144 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5">
-  <meta name="description" content="WHENG 생활설비 - 사랑을 실은 설비공. 수전·변기·세면대·배관·누수 생활설비">
-  <meta name="theme-color" content="#08766d">
+  <meta name="description" content="WHENG 생활설비 - 사랑을 실은 설비공. 수전·변기·세면대·배관·누수 생활설비 전문 시공">
+  <meta name="theme-color" content="#0a756b">
+  <meta property="og:title" content="WHENG 생활설비 | 사랑을 실은 설비공">
+  <meta property="og:description" content="고치는 것은 설비, 이어지는 것은 사람의 마음입니다.">
   <title>WHENG 생활설비 | 사랑을 실은 설비공</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main id="top" class="approved-page">
-    <div id="mockupShell" class="mockup-shell">
-      <img class="mockup-image" src="assets/wheng-approved-home.jpg" alt="WHENG 사랑을 실은 설비공 홈페이지">
-
-      <button class="hotspot nav-service" data-scroll="0.43" aria-label="서비스"></button>
-      <button class="hotspot nav-cases" data-scroll="0.80" aria-label="시공사례"></button>
-      <button class="hotspot nav-reviews" data-scroll="0.80" aria-label="고객후기"></button>
-      <button class="hotspot nav-about" data-scroll="0.57" aria-label="WHENG 소개"></button>
-      <a class="hotspot nav-phone" data-phone-link href="tel:01000000000" aria-label="전화 상담"></a>
-
-      <button class="hotspot hero-quote" data-open-quote aria-label="빠른 견적 받기"></button>
-      <a class="hotspot hero-phone" data-phone-link href="tel:01000000000" aria-label="전화 상담"></a>
-      <button class="hotspot cases-more" data-scroll="0.80" aria-label="시공사례 더보기"></button>
-      <button class="hotspot reviews-more" data-scroll="0.80" aria-label="고객후기 더보기"></button>
-    </div>
-  </main>
-
-  <div id="quoteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
-    <div class="modal-backdrop" data-close-quote></div>
-    <section class="quote-card">
-      <div class="quote-head">
-        <div><small>WHENG 빠른 견적</small><h2 id="quoteTitle">사진으로 빠르게 상담받기</h2></div>
-        <button class="modal-close" type="button" data-close-quote aria-label="닫기">×</button>
-      </div>
-      <form id="quoteForm">
-        <div class="form-row">
-          <label>지역<input required name="area" placeholder="예: 수원 권선구"></label>
-          <label>작업 종류<select required name="service"><option value="">선택</option><option>수전 교체</option><option>변기 교체</option><option>세면대 교체</option><option>배관·누수</option><option>각종 설비</option><option>보일러 분배기</option><option>기타</option></select></label>
-        </div>
-        <label>증상 설명<textarea required name="issue" rows="4" placeholder="불편한 증상을 적어주세요."></textarea></label>
-        <div class="form-row">
-          <label>연락처<input required name="phone" inputmode="tel" placeholder="010-1234-5678"></label>
-          <label>희망 방문일<input name="date" type="date"></label>
-        </div>
-        <label class="upload">사진 첨부 <span>최대 5장 · 장당 5MB 이하</span><input name="photos" type="file" accept="image/*" multiple></label>
-        <div class="photo-preview" id="photoPreview"></div>
-        <details class="privacy-details"><summary>개인정보 수집·이용 내용</summary><div><b>목적</b> 견적 상담·방문 일정 조율·문의 응대<br><b>항목</b> 지역·연락처·문의내용·희망일·첨부사진<br><b>보유</b> 상담 종료 후 3개월, 시공 고객은 시공 완료 후 1년</div></details>
-        <label class="privacy"><input required type="checkbox"> 개인정보 수집·이용에 동의합니다.</label>
-        <button class="submit-btn" type="submit">무료 견적 요청하기</button>
-        <p id="formNote" class="form-note"><span id="siteMode">실시간 접수 운영</span> · 확인 후 연락드리겠습니다.</p>
-      </form>
-    </section>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="#top" aria-label="WHENG 홈">
+      <span class="brand-house">⌂</span>
+      <span class="brand-copy"><strong>WHENG</strong><small>생활설비 전문 시공업체</small></span>
+    </a>
+    <nav class="desktop-nav" aria-label="주 메뉴">
+      <a href="#services">서비스</a>
+      <a href="#cases">시공사례</a>
+      <a href="#reviews">고객후기</a>
+      <a href="#about">WHENG 소개</a>
+    </nav>
+    <a class="nav-call" data-phone-link href="tel:01000000000">☎ 전화 상담</a>
+    <button class="menu-btn" type="button" aria-label="메뉴 열기">☰</button>
   </div>
+  <div class="mobile-nav">
+    <a href="#services">서비스</a><a href="#cases">시공사례</a><a href="#reviews">고객후기</a><a href="#about">WHENG 소개</a><button type="button" data-open-quote>빠른 견적</button>
+  </div>
+</header>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<main id="top">
+  <section class="hero">
+    <div class="hero-bg-house" aria-hidden="true"></div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker">생 활 설 비 전 문 시 공 업 체</p>
+        <h1><span>사랑</span>을 실은 설비공</h1>
+        <p class="hero-line">고치는 것은 <strong>설비</strong>, 이어지는 것은 <strong>사람의 마음</strong>입니다.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" type="button" data-open-quote>▣ 빠른 견적 받기 <b>→</b></button>
+          <a class="btn btn-outline" data-phone-link href="tel:01000000000">☎ 전화 상담 <b>→</b></a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="image-glow"></div>
+        <img src="assets/wheng-tech-mars.webp" alt="WHENG 생활설비 기사와 마스" width="1200" height="800" fetchpriority="high">
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="service-strip">
+    <div class="container service-grid">
+      <article><div class="service-icon">🚰</div><h3>수전 교체</h3></article>
+      <article><div class="service-icon">🚽</div><h3>변기 교체</h3></article>
+      <article><div class="service-icon">🚿</div><h3>세면대 교체</h3></article>
+      <article><div class="service-icon">🔧</div><h3>배관·누수</h3></article>
+      <article><div class="service-icon">🛠️</div><h3>각종 설비</h3></article>
+    </div>
+  </section>
+
+  <section class="share-wrap" id="about">
+    <div class="container">
+      <div class="share-banner">
+        <div class="share-heart">♡</div>
+        <p>수익의 일부를 <strong>유기견 보호단체에 기부</strong>하고,<br><strong>취약계층 무료 시공</strong>을 진행합니다.</p>
+        <div class="paw">🐾　🐾　♥</div>
+      </div>
+      <div class="promise-row">
+        <div><span>🛡️</span><b>정직한 견적</b><small>투명하고 합리적인 비용</small></div>
+        <div><span>👍</span><b>꼼꼼한 시공</b><small>작은 부분까지 세심하게</small></div>
+        <div><span>🏠</span><b>부담없는 상담</b><small>언제든지 편하게</small></div>
+        <div><span>☺</span><b>사후관리</b><small>시공 후에도 든든하게</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-section">
+    <div class="container two-panel">
+      <section class="panel" id="cases">
+        <div class="panel-head"><h2>시공사례</h2><button type="button" data-open-quote>견적 문의 ›</button></div>
+        <div class="case-grid" id="caseGrid">
+          <article class="case-card"><div class="case-placeholder">🚰</div><b>수전 교체</b><span>AFTER</span></article>
+          <article class="case-card"><div class="case-placeholder">🚽</div><b>변기 교체</b><span>AFTER</span></article>
+          <article class="case-card"><div class="case-placeholder">🚿</div><b>세면대 교체</b><span>AFTER</span></article>
+          <article class="case-card"><div class="case-placeholder">🔧</div><b>배관·누수</b><span>AFTER</span></article>
+        </div>
+      </section>
+
+      <section class="panel" id="reviews">
+        <div class="panel-head"><h2>고객후기</h2><span>WHENG</span></div>
+        <div class="review-grid">
+          <article><div class="stars">★★★★★</div><p>상담부터 작업까지 친절하고 깔끔했어요. 필요한 부분을 먼저 설명해 주셔서 믿음이 갔습니다.</p><small>WHENG 고객</small></article>
+          <article><div class="stars">★★★★★</div><p>급하게 연락드렸는데 꼼꼼하게 확인해 주셨습니다. 작업 후 설명도 이해하기 쉬웠어요.</p><small>WHENG 고객</small></article>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="brand-story">
+    <div class="container story-inner">
+      <div><small>WHENG 생활설비</small><h2>좋은 집, 더 좋은 세상을 만드는</h2><strong>WHENG</strong></div>
+      <button class="btn btn-light" type="button" data-open-quote>무료 견적 받기</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <div><strong>WHENG</strong><p>생활설비 전문 시공업체</p></div>
+    <div><b>서비스 지역</b><p data-service-areas>수원 · 화성 · 용인 · 오산 외 협의</p></div>
+    <div><b>고객센터</b><p data-phone-display>010-0000-0000</p></div>
+  </div>
+  <div class="container foot-bottom"><span>© 2026 WHENG. All rights reserved.</span><a href="admin.html">관리자</a></div>
+</footer>
+
+<div class="floating"><a data-phone-link href="tel:01000000000" aria-label="전화">☎</a><button data-open-quote type="button">견적</button></div>
+
+<div id="quoteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+  <div class="modal-backdrop" data-close-quote></div>
+  <section class="quote-card">
+    <div class="quote-head"><div><small>WHENG 빠른 견적</small><h2 id="quoteTitle">사진으로 빠르게 상담받기</h2></div><button class="modal-close" type="button" data-close-quote aria-label="닫기">×</button></div>
+    <form id="quoteForm">
+      <div class="form-row"><label>지역<input required name="area" placeholder="예: 수원 권선구"></label><label>작업 종류<select required name="service"><option value="">선택</option><option>수전 교체</option><option>변기 교체</option><option>세면대 교체</option><option>배관·누수</option><option>각종 설비</option><option>보일러 분배기</option><option>기타</option></select></label></div>
+      <label>증상 설명<textarea required name="issue" rows="4" placeholder="불편한 증상을 적어주세요."></textarea></label>
+      <div class="form-row"><label>연락처<input required name="phone" inputmode="tel" placeholder="010-1234-5678"></label><label>희망 방문일<input name="date" type="date"></label></div>
+      <label class="upload">사진 첨부 <span>최대 5장 · 장당 5MB 이하</span><input name="photos" type="file" accept="image/*" multiple></label>
+      <div class="photo-preview" id="photoPreview"></div>
+      <details class="privacy-details"><summary>개인정보 수집·이용 내용</summary><div><b>목적</b> 견적 상담·방문 일정 조율·문의 응대<br><b>항목</b> 지역·연락처·문의내용·희망일·첨부사진<br><b>보유</b> 상담 종료 후 3개월, 시공 고객은 시공 완료 후 1년</div></details>
+      <label class="privacy"><input required type="checkbox"> 개인정보 수집·이용에 동의합니다.</label>
+      <button class="submit-btn" type="submit">무료 견적 요청하기</button>
+      <p id="formNote" class="form-note"><span id="siteMode">실시간 접수 운영</span> · 확인 후 연락드리겠습니다.</p>
+    </form>
+  </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script><script src="data.js"></script><script src="app.js"></script>
 </body>
 </html>
