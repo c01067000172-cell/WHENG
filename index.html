@@ -3,149 +3,80 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="WHENG 생활설비 - 수원·화성·용인·오산 수전, 변기, 세면대, 싱크대, 누수, 배관, 보일러 분배기 출장 시공" />
-  <meta name="theme-color" content="#101820" />
-  <meta property="og:title" content="WHENG 생활설비 | 수원·화성 누수·수전·변기·배관" />
-  <meta property="og:description" content="수전·변기·세면대·싱크대·누수·배관·보일러 분배기. 사진으로 빠르게 견적 상담하세요." />
-  <meta property="og:type" content="website" />
+  <meta name="description" content="WHENG 생활설비 - 사랑을 실은 설비공. 수원·화성·용인·오산 수전, 변기, 세면대, 배관, 누수 생활설비" />
+  <meta name="theme-color" content="#006c61" />
+  <title>WHENG 생활설비 | 사랑을 실은 설비공</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="manifest" href="site.webmanifest" />
-  <title>WHENG 생활설비 | 수원·화성 누수·수전·변기·배관</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a class="brand" href="#top" aria-label="WHENG 홈">
-        <span class="brand-mark">W</span><span class="brand-text">WHENG</span>
-        <span class="brand-sub">생활설비</span>
-      </a>
-      <nav class="desktop-nav" aria-label="주 메뉴">
-        <a href="#services">서비스·가격</a>
-        <a href="#cases">시공사례</a>
-        <a href="#quote">빠른견적</a>
-        <a href="#about">WHENG 소개</a>
-        <a href="#good">사회공헌</a>
-      </nav>
-      <a class="nav-call" data-phone-link href="tel:01000000000">전화상담</a>
-      <button class="menu-btn" aria-label="메뉴 열기">☰</button>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="#top" aria-label="WHENG 홈">
+      <span class="roof">⌂</span><strong>WHENG</strong><small>생활설비 전문 시공업체</small>
+    </a>
+    <nav class="desktop-nav">
+      <a href="#services">서비스</a><a href="#cases">시공사례</a><a href="#reviews">고객후기</a><a href="#about">WHENG 소개</a>
+    </nav>
+    <a class="nav-call" data-phone-link href="tel:01000000000">☎ 전화 상담</a>
+    <button class="menu-btn" aria-label="메뉴 열기">☰</button>
+  </div>
+  <div class="mobile-nav"><a href="#services">서비스</a><a href="#cases">시공사례</a><a href="#reviews">고객후기</a><a href="#quote">빠른견적</a><a href="#about">WHENG 소개</a></div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <div class="hero-kicker">생 활 설 비 전 문 시 공 업 체</div>
+        <h1><em>사랑</em>을 실은 설비공</h1>
+        <p>고치는 것은 <b>설비</b>, 이어지는 것은 <b>사람의 마음</b>입니다.</p>
+        <div class="hero-actions"><a class="btn btn-primary" href="#quote">▣ 빠른 견적 받기 →</a><a class="btn btn-outline" data-phone-link href="tel:01000000000">☎ 전화 상담 →</a></div>
+      </div>
+      <div class="hero-visual" aria-label="WHENG 설비기사와 마스">
+        <img alt="WHENG 설비기사와 마스" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHCAkIBgoJCAkMCwoMDxoRDw4ODx8WGBMaJSEnJiQhJCMpLjsyKSw4LCMkM0Y0OD0/QkNCKDFITUhATTtBQj//2wBDAQsMDA8NDx4RER4/KiQqPz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz8/Pz//wgARCAFAArsDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAAECAwQFBgf/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQIDBAX/2gAMAwEAAhADEAAAAfZCEGgYgaAYgYgYgYgYgYgYgYgYgYgYgYgYgYshsOFnPSnm9Z2Sm0ZEJEQkQCZASZAJkAmVskkESQRJMgTREkESYQJojNBIiEiATIIsKwsKyywrCwrCwgExk0hoAYhoAAAAAAAAAAAAAAAAAAAq8eeo87w3vFmdm8TgrbCNlMHc4dk19Gn4v2nLqhpBNAAAJAclgTiiAoAAAGiGgGIGIAAAKECAAACaYCYAAAWgToAIJoBoAYIAAAAAAAESBAhoEYgeGzwFSzSj05WC7mpg63R52N3Lj2pu3cCB0MRfXE+geE7eb69NY2ACAQTmqYNABWrBmtuNjAAAaqkkwJQAAATVgAAAJgmAAxDBDCwCdAAAEQAMBMQAAAAMTBQAExIkooB5889kjLtyrsqsRzrqN2WmxYO/PF9eQmtRnlZbu5zl+qHl/Tc9yAFKITICzIBMgJMgLOtpkCuyeaEWAC50X4JzWwjJ0AIAKEwQ0gDABRFaQnnGNcsWxq0CdQAAAAQABMEADQMQMSJEQkRCSQHz33/yzWdIjrxrnQs6ndCg1zXrOPo5vTul5vXlydZHleT77L05eKjry+rxz6fKE+o3eL9pz6IBENUAAAAAEcyWUA5oasC+EtYFhpzEu8y6nQybMLMiCubtOXXNoZNAIyxcbyAYgDorB4Gd/ZcLzmu56vsvlXv5fQAKAAACYIAAEQAAAAABh+bfR/m+s6csbqr9XR6bz+rxuj1bzrz1HqGkWPOlRohXkp+i52s6PH9vHZyVGXq8fR+jec9Hz6ESlm6Wa4mmSpip0wqYaC5EXRXqsc6gDWfL0oXGAnC8hoNmREoBZbsya50BVTV2WRc5yUWE3Wlg5ryub7Tz879LzsvOIvp3M66gAABmtwY3usyaLJjWsgAhpAAAAFUZfmfruvnfz99/lL7m+K4ejm+f9Nr3jy/q8WmLQWdMOFZ3TxprPsvLep8scz23K9P24RqsruCMkkRxSd+WS25kMiZYnLXNV3BOoAAAABl1Cc03Y7yiBcgBdrxbZ1hnsgiSbKcJkKrK2RNWdb573fGz0eu6vzkPo1XkujHrdPN6SgBjxaeVz66uhyN2p03XZcICwAENIZ3lzuzidfh532MPUp4+inzno9usKFimoSMZvddjKhZBYWKRHPfFbPEe181vF/qMHM3x9HFx6cGkIk0iAEnIhfbY2mE2JhkrdV46q5ULPRh2GgCdRMMlHSqvPGNXmTgLc6LpVTqzEFJMXCTTrsrPFdn2HAnavvfKOwfRCuxQAAhLi4nW5WOq7XnPUVdanrmArGAiqsz51gp0czPTrqHRufP9XFz866uvmHPp0xgqbyuH0NuG52PjSOvyYdA0Rms7hwOvjs6HJ1aOnHpJrr54qSRDQlK8q0snQAUAAAzwjTeWuMa1tvway8ZOiGCGEcm1JzzTnvJA0lVMK1fAgpqxRk46Pyn6v80nf1PiL/U13tgSgAZ9FcvGp6enn15fXDpzkCSSTGRYU3RPLllmO3TeTyV59TVzK9T2HE9RK54u7znS4ejoiM6YmCYJgJnFsw39HrdvPw+6jfMTSIaRSnc1GQTYAAAAAAYat0bzhRtiYdjsJgToAAAAAQmGOG6i86GNlDZSr60gppOkmT0wmAAIEBZxlFKp1uWbr8qesfmPRF4AiNZcRZHm9SnO+R5brck6dnG2O2v0nldKVdXLZnOzTWuXbSYcydd8LHrPqcPD7u+fM7PROnGI1rCGhDkQtk5oBKxMFCKXFSLhCsTAAAFAEAAAAAAAEDEEc+oTI7a7gGyFd7TL0eH3J1AA5XV5Ge+bZye3j1b4yh1+dnlC6XH4L6NBfn3v5aUYiqfHey8jLzve+R9aXRjE4vm7reX0JRxLHt2Xwdx6vI+r6PieX6nR87y69KNezl2zcnu+R6Y9Bs3eV7eb16+b+kufRgQk1ZK2q2aAStYGbgCqE1eaJxLgJ0ABiYAAAAACRJAAAAAAAZU1RxXMzLoLEYUz0DQACYcvoWE6FdlVxTOEJdCi0mo8Kuzb5LcejiBXMIjBpfAZvbeYnbLmnqm96zX+f7Ov13h/Xej4myqGbfn50ulz8638fp4+fXtSzU9uHiKfU+a6cez0OJ7vHSufnelJ0ra7FXmu1w8705e1yufXqb8urtwri1cNNJcBOgAAAxAwApupSCZrmaM+ibAJoAAMqWc513g51SZ6tvP2T0TjMaCEwAAAAAptolM+qhYuuVmXxvsfBL383NhnX0DfztusTglLZYgq8x63n2eGzeg83c2dvz3Z4/U1Rooz191s8t6Xv8i2M0eR6mnVFhN15Dz/qzyWsT9/wDPu0ntOH2Z56YOn5T1CcayuPLt0OD2+LL6kH24RjMSKmINDTFUlrpLLgJoaB021JW2tc3fRfNhUi4qnK8mvmM0pPXBgRK7Nqa6QE9HP1289OgCVoAaYs91MqnVJaK9GYr8p2fP1m7vE6qevpr1Sl7mKthOAWeS8z7Txty9VfvM9MHTmcO0eF1eRZ6qfiLfR5vSS8neexPH2Fvku3wrJxnVrP1C7n18+ufDv6PPpw59kxvPzuxJXq8v6jv5gBDPZiuNGnmtnoVwsbTGELIErK7JoqtrKpIuDRRe1SmMq3Fgue5ytBGSN0HOLjYR052vWnj2T0HP6HOOgAoAAIhXNSwTJa6rorlz66Iy65X0aYWllbSKyM6ronlss+a/TvEHe7DPP6EwlCGOvLZOlg9fiQzpxBCxquyy6qSEv0TBm7HLvGfF6nD0V33uGm5eH6Tj3duHTCvpyzwavGI4o9ePdNM5BZ2o12TrKcJTTrlBIjVy7qbmqa7cbGfJKu+eyzPM2xmp0rI2kHZcum8J6McjSgAoAFdlRFolSklgrFFML0tc5SCRJBMCQqq4nZ48YuxrOXZMM6AAKMdV+Q9R5j0eUJvv54KYQLApU6pev1OF7Pl3ul5nq+f09F8/ZLNiheO9l5/ePRX+a9D381MLYOVQ1cme/KzERcdDfwd07dIjlnWmNSvHqLDvnQuqm1Vg1ZXPGtObXIY5Ld+frztx9EOi1mvVM1sITbQgYgYBGDSkJxgQyLTUGAwGICSY4jDLry42mjl1YqyzPg8vqaSVmPrcfr1P2fB2XWYdcdAirap1xj5fc4es2+58F9D59uX2PJdXz+nrvnbsamIDl9PDUbdHH9Hk7sC28sqstZx5t2bWKVrglO3Nol6OIpnSMGriezJbNbpKLrnzzHKqnS7My6MSWrFGbnookoJJIiRuBuyUgQwpcmsFYRnlaFTsRBzZWrQrLAipohKYQz6801RCFnHvi8X7SPfz+KXuI9eHlOn19nm+vwOH7qrXHxx62Xo+b5BewR489gHjIe1F8L9Fw9jn08/T6DZnXmbOpbz7czTtlLm4/f5Fz3fM9qnrwvWsvPLDWGOO1M4Y7wyR3Bjeya4jcLilrDKahcpqEyR2hjesMpdBESCstmtBpa3ATqAAAAABUkoVjNjyOzZPLKXQJtgAAAAAByOnzepEgKAAAAAAoSyFYxY6itEsts1aA0AAAAAU3Upm35tIAKAAAAAKNLNsay5sszi6im6aAFAAAAAWXXBmuxsYCgC//8QAMBAAAQQBAwIFBAIDAQADAAAAAQACAwQRBRASEyAUITAxMhUiI0EzQCQ0UGAlNUL/2gAIAQEAAQUC/wC1wYuDVwauDFwYuDFwYuDFwYuDFwauDFwYumxcGLGP+pJZgjTtVqNX1iuhrFZM1Ko9Mex4/8fPahriXVZHqR80q4RhZWSuRR4lNaAa+pSRFrg9v/i5JGxMtao+RcGglxPY2N7l0pOWDlZ8tMnME/pYWP+/asx1op5ZLT85fs6tJG5lWLxFKrIwQE/TKjs6jAxr7LRHBVthmHZcylN4ir/4ixOyvDJI+xK4pnxUGLVR7mvmdK2LWILPRtsthsQt8Zq1t1d0NhhhtzxvrtODo0nCb1cd7n4Qdn/p3bHi7Kf8AHZjjG+aw+aUuC5ZQEi6cqLHLDlkhdRqqycNQ/pHyTn53a/8ApF5TXZWR/d1ex0qwGGp+5euLimtARcAjMjI4oYKwuTlyQa3NfVMFpDm9mVlZWVlZWVnsc7CJz2hxCBz67vjuPb+3fl62obORcAsOcgAB5BRxyzqGlGxcUYwU+pC9SaeQnBzHbNcQKtt9QxSNlj9Vz/Ra/s5FciuRTXHl2uOXf33u4sac7yOTfI8kZFAawMT45GrCwsLCmiZK2xXdXOwPE6RN07Hpk4ROe1seU5hb2tdhA52PvtH8uwnCdjOw7D5KfU68SfrMxLNXsB1adtiH+pdOKTPinOymRl8h06BWaoD49NK+mR4j0+eKxjeZ7Ion6k/Meo+f2SR2GCCxtRBOobZWe9zu0DKawDd0faDhNflH32j+XZJ8u65aZVjs3ZrJHmjVmES0ZhbS/qX/APQb8SeSAwtLg5Ox6D2te3w8OJtOieqUc0NjVmYkb7ZwtKqOj2PtsD5b5wnOz2tZlAY7XNDk5pb6Efy25ouTvMbY2ZhfjWqU5LCg0dxUNaGAa3OqsDrM7GhjO0v88+teI8Fy+xuAD5qJgjjVy4ysPGXpFX1N4ePMd+sDy06q21Ygo14Ce5vui7CPn2tZ6Lo++L5J3x7XnJ7NWsmGDRZZHOtOdPd0+oKsPa88WMxgFD08qaRsUUULrzhBDjUKLWNrN521lSQRSShWa0dlkTBFFvftSRv8FdeorVipMtWdmxokf4k7v5eXYGkoDHpuYCiCO1hw5E9mdnNwezV5ed7Q24gApwSnUKoX1OooZo5m72Pi44aHFRuz6TvdxwNVeXVnDDHRgKN3VZUgfFqPfwaVGcjG0sUcw/V3lPqUc1mjHHI2SM+m1na9xDublGSS57uXNyjJI3IynMx2hxHZnfOdiuKn1aNqkd1JMu4sje8x6dbemaNIVTpx1G7yec0rvvaRiJD0HvAReicx6l5V/Ip3yh85eyxYZWY05bsRkNaGjcKl/Mw9QaXmOX0QMprcd0nzUXu/5qH49rmZRGO3llcPIjG4WdvNM0+08xaMjDp9Ms48O79WD51nB7g0BDvcU8nKZ/FPB4ijp03ONzV0/wAnZJFHIAJ6ahswzdkt2NljfTv4QPu0/wC/UPQDcoDHe5mT0kxvEmPJ6SY3iO4jKczHaHEd2d9SveHaecj62oTQJjw9nY44bGeTZhhVTiZgz6B95PJF+XM+EX8d2kZHs1Axnx9bFe5HPJ2zVYZl4JzV0La8E56hhjhbtaf06tCMtq3rAghoV/D1u9rfRk+ai93fJRfH0HM7gB3HyE8hlnpQx0qsh5yVGGOr2TfxuYcvY54gqcH+hIFek84WYQbiOxZiqxvvWZTDad1fB1s6lXML6s7Z4vT1Kwx0xvc1UpObJ3AZQGPSk+ai93fJQ/H0S0FFuO3HaRkW6slaV8li07TtOMbu2QZYPNBuPSPmrFciWMBokn/H9zn8WsbwluJow1XKzqTq1psw9G3aIdUoxwxgADuDfULAT0wmtDUYwT0mprePqOZ3Y7CMoNDe8+zRjsz6DhyBjGbQDK5k6Yip5EuofbXtz15rVuOsNRuPlqtaODS5qDu6a1FCOpauqrUjqt7wMf3y3KIx249Bzg0NcHBO9gsouAE+pnlXuSPmadysoEHeRq1KRwlEnEM6kwDQxY6sGmjqG9TMygsNlOxyi6cLxFoJ921zrCe8odOrxHvA7yVyXJcv7Jb3QSOda7JrDmyTS9RU9j7bSx9SKSF8ToGPdYgB47SHiLtwvdHbkhfC8SRony1drDTjh5I7NcWvafDXsKxTbOBPJWdnIwsLCqfddmq9RVLjZmdw9+8+6Pv/AGiO2BjX3uy1F5qoPxI+37CciMpsbQ7d7eQm02R0kOmylzWhjdnPNiySnzqCU9RwTx1qlGbr1k9jZGvqzUzXnjsNwiFH1IJmNWs1VDNNEqeo839g995bleEw24JzsfdH39bOfSdKuo5NlztjeOHhNDE2FvZLVymDi1FFDYbErkge0rkGCSRjbL3ukUbBwaC5582RHhJUd4bUNnyNYrEDZpKtkyHzKsN5XJJWxr7ZY54TXslvJtKKR8AvyQuY9r2oe+1uxJPPDSghF2pGYaMpmpo7H1Xbj375DhiztGcs9T9lZQO36sXgHC48KvbBf2FOaHRz12TR4zVdjmZmgQShxcp/yV6s4nryScU1qLFdrukFaZs8FT82ovIe/BidqjGz1wVSn6F1wD2yU5azqdtllo91ak6NbTIuFZalJwp1Y+jWR91+/UfuPfuldjY7sk4hrg4emfd3Zdfxq9VsbhKwqR8bjQkMlZZWUEU5Wm9K3JHwe5vB7Dxk9xEQHw2nUHxRrG2FaJo2KsboqrWhoLcrUg+uWDDXDLaUvWqE4F6qeVKy2zEtXP8A8dB5RK2OpqWxWFhY9R2/77ph59sZw/Zrg4egdnBE4AORZbziezi7kmM86TOnX2CC/eFYgbLHNHaih5I4Kru5MeQFZkjkFHUYWVopWSt2tND3x431l+IQXYy5aZa6Cd8FZBo3GkFur/8A10JzEFJ9us+mPftduPdZWVlDZ7+W/wC9oRl+z4zGY3iRneUCiih5CR4DZvyHpHNJjQR7OJLsZQbsNnLWAQWglFrlThllfFp8DE1jGotDlZj8G4HkE7/bZG4O21lv4Q0F3TavgeWYletREV4r7YHUpJGtpFoYxzRqMbzHWnZYh7DIhJ2/t2zd3b/vsHsiMHb9rCY8tTTyGzPx2u49jk5TxyqQSgtL2qCV2YzyaAgNju74a03NbzBhY+xLFE2GPYvkCvT5qRanMyL6pYX1Ccv+qWF9UnQ1WVXL/iIG/c/ij5GHIq6jOYKlKuIIe2D/ABdU3eft2ymvGNv2dm7u3HvvK/iMlQSEmRwJWF+94N5v9rvOxRRC9k5gehXGWtaEB5jYnsefwzRiav5Ndp1boQdh9r8Agsjtwm/yp/2uEgkj1ZhNKGRr43SxtRuVwopmy76n9sYOW97PiThAgk7Dd2/72c7iJHctgSC13mv2fn7lBRNwNvnd7TsewohcUGoDvf7y/wAbz5afX61rsfy4mWQLUZmyy9x8pOoE9wctOfyqXZ2wVatECJtaBqAA7LjOpU05/UoInA7W+TXu5EFMfzYhtnCyDuN50TuPdYX/AOgNovntPLwUEfSj7T6GFj0Hq1YZE7lauCvC2CHu1GFslYP8uSysrKyshZbtpb/zaofwNILe3GVUM0CrzMsQn2R7HOOdoHANQRT3ZcCg4HYIHKc7ipZCe1ny4FOH5GN5HpFMZx3ihbH6+EO8qVpcyGjHG7uklbGHXYGLULIFRowO4rHlp/lfkjbJFRdYLP8AMXCyU0EDeceEsyf4F52xX72Pmd67vNTfI7M+ezVJ8nNyuIxvBGS5SDFgDAe7CyUDkd5/p/vtkeGtmlNqSOLksES1ImzB9T/CdVjTagFe1BHELFJrCa8UbrLIg39VvK7KD0NMcPBd19vKnw8Xo9GXrUdj7p/t2QYz+nO5I7BRu2Cc7KOzx5cCsKI8G8xmT/ZefP0j/Td77ZRKmuQxKzaksGPBb7K4xVJejYbdjFyKzhjLQ8PamhkXjWi4bMUjrdlj6/6YcTKblTtxW3vjE8hTckb3ncaVAcaOm+RXFOH38ftwuBXTw1rOTOCaMDl5bDZhwR7OcBtxXFOA6QIDN8bj+4/bKsTtrxve6aTgsKq7i4+Rj+9g+0+g5N82xASaiGWKhGoR5bqMBPjYk15cgVfPVc3AGnHLtn/PKysrkcMP25WVndgwuKx3O+P67cdmO3C4risLC4rguK4riuK4riuK4riuK4riuKwsLCkBATGFyk0xszxpMS+lRL6TEhpMQd4BmPAMBl0yKST6VEvpcS+lRL6VEvpUS+lRL6TEvpMS+jwplcMbFUbHL0wn0mOsmqwptZjV0AnQ+VSu+OSeThBRqmGr0gukF0QuiF0AugF4dq8O1eHC8OF0GrpBdMLphdMLphdMLphdMLphdMLphdMLphObjswuJXBdMemThclyXJch6j/tTBhnpclzXJckDn05PZjeUvp8lyXNZ9TC4riPWLt5JGRBkjJGoHHpuH3D29EnPcHelJ8Yvf0ScdwP9L//EACcRAAICAQQCAQUAAwAAAAAAAAABAhEQAxIgITAxBBMiQEFRBRRx/9oACAEDAQE/AfyLLLL8Nlllllll/guf8Nzyp1zr89uhuxKyki0Wj9EH+udcL/Kk74Lv0iqwqXCyyyx4csKXhsT8z9Yo7Zp6K/Ykl6PZLRjL0Si4sT5t0N4p4ToTskWR52Lxy9EY/wBIJfs2o2rP3In98SsNieXLFWKNYcct3iPrD75LMV+x81p2Vja2K1hujcSfWHlMbvCjYlXBqxxrMfQ8vDZZ3leqGuK6H6IslHvDfCiUbdGpHbyUctuz9EX3lx/nB8KRfBeyXBIQ/RGZd5plneE/uNWV8ErEq4No6ojV8GrGq5Pghsu+K9DzGW7i3RvLyo8nFm10Ri0+TjmuNeCLok7NH409X/h8jR+kzSeKG6HqDd8Es2X5GrKxWdDbu+41koaVLw/G+LuW+R/saalsR8nT3wxHUr2WanaxaeV+C3RuTK4y1JSVPw/Xns2GhpKf3SdCqa6PkQ2TxGVEpdYkqdi7RQiKtjSS8LxHLdEpXiL8K6N3GXo/x+r1sZ8yMWuMk2QTWdLsn6xRWLLy8RLLJ+sx949eVmjuuyiUVRaNyLQ30RfeFA2ofaH1iTFM94Yh4WN+0dSV5ToTtD8tX0LrOr1LKFafHUXfCJ9Q94eEPpD74JC68qVijXDWq+KLzNWPrMsQn+hulhOxErKxCPQo9nS80MuSiaelGMOj5EPp6h0dHQyPoi7y/RL1iho2sj7G8LD7KNqE6L88fZdGpJy9G2R8f5UYwqZ8uenqr7TYzYzYzYxKhOhT/pvRKarol6NrNrNkjZI2SNjNjNjNrNrNrNjKxRtfKyy+W6+LZZYnyXFssvk0Vn//xAAjEQACAgEDBQEBAQAAAAAAAAAAAQIREBIhMQMgQEFQMFEi/9oACAECAQE/AfuaCllx+MlZVDZZTKZ7JL4qVdjLvD3+JHnFmyJ9V+i28R6jXInqK+HElIk/4amann/JH/MsPypfz8HOi8WkOsJWaSPPme77nuLkYn3p1uRlfmLuXJKJWbRRtj0dNeUxLvWZRrtSs0/CkiKockiMrOpmrFASrymLd/jOfpGl8kXTxKH8KOnzivLr8dKuyTo4Iu1iUbIrfEd0PbLdCbv4COst7IdsWkSp56hDn4COo16LIt2UymUxcklthzNTE/Lvtuh756fGWPdY2zDjtryW6G77OlfayswfnTyotjZB3E3NzcQ+SSyufOfBRCKXJaJwt7HTuJqRqRqRqQ2PccDQyMd/PqvP/8QAOxAAAQIDAwkHAgQHAQEAAAAAAQACAxEhEBIxBCAiMDJBUWFxEyMzQEKBkVBSFGJyoTRDYIKiscFTY//aAAgBAQAGPwL61sj4WyPhbI+Fsj4WyPhbI+Fsj4WyPhbI+Fsj4WyPhbI+Fsj4VPqmnFaPdbZPQLZifCqHj2Xiy6hTY4O6H+kO9eBy3qWTQpD7nLv456BbM+qo0W1YFOE90NyDcr0m/eEHNMwd/wDRhc910BXclF1uF5Xnab+JzdFjj7K7cdPhJSlZI1C/DvPdv2D/AEXfiew4q/Ho30sC5Cgt[...]" />
+      </div>
     </div>
-    <div class="mobile-nav">
-      <a href="#services">서비스·가격</a><a href="#cases">시공사례</a><a href="#quote">빠른견적</a><a href="#about">WHENG 소개</a><a href="#good">사회공헌</a>
+  </section>
+
+  <section id="services" class="service-band"><div class="container service-grid" id="serviceGrid"></div></section>
+
+  <section class="share-strip">
+    <div class="container share-inner"><div class="share-icon">♡</div><p>수익의 일부를 <b>유기견 보호단체에 기부</b>하고,<br><b>취약계층 무료 시공</b>을 진행합니다.</p><div class="paws">🐾　🐾　♥</div></div>
+  </section>
+
+  <section class="promise-strip"><div class="container promise-grid"><div>🛡️ <b>정직한 견적</b><span>투명하고 합리적인 비용</span></div><div>👍 <b>꼼꼼한 시공</b><span>작은 부분까지 세심하게</span></div><div>🏠 <b>부담없는 상담</b><span>언제든지 편하게</span></div><div>☺ <b>사후관리</b><span>시공 후에도 든든하게</span></div></div></section>
+
+  <section class="home-panels">
+    <div class="container two-panels">
+      <div class="panel" id="cases"><div class="panel-head"><h2>시공사례</h2><a href="#quote">더보기 ›</a></div><div class="mini-cases" id="caseGrid"></div></div>
+      <div class="panel" id="reviews"><div class="panel-head"><h2>고객후기</h2><span>더보기 ›</span></div><div class="review-grid"><article><b>“</b><p>정말 친절하시고 꼼꼼하게 봐주셨어요.<br>견적도 합리적이고 믿음이 갔습니다.</p><div>★★★★★ <small>WHENG 고객님</small></div></article><article><b>“</b><p>급한 상황에 바로 와주셔서 감사했어요.<br>작은 수리였는데도 정말 정성껏 해주셨어요.</p><div>★★★★★ <small>WHENG 고객님</small></div></article></div></div>
     </div>
-  </header>
+  </section>
 
-  <main id="top">
-    <section class="hero">
-      <div class="hero-grid container">
-        <div class="hero-copy">
-          <div class="eyebrow">수원 · 화성 · 용인 · 오산 생활설비</div>
-          <h1>생활 속 설비 문제,<br><span>WHENG가 직접 해결합니다.</span></h1>
-          <p class="hero-desc">수전·변기·세면대·싱크대·누수·배관·보일러 분배기까지. 사진으로 먼저 확인하고 필요한 작업만 정확하게 안내합니다.</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#quote">사진으로 빠른 견적</a>
-            <a class="btn btn-ghost" data-phone-link href="tel:01000000000">☎ 바로 전화하기</a>
-          </div>
-          <div class="trust-row">
-            <div><strong>현장 중심</strong><span>불필요한 작업 최소화</span></div>
-            <div><strong>사전 안내</strong><span>작업 전 비용 설명</span></div>
-            <div><strong>시공 기록</strong><span>전·후 사진 관리</span></div>
-          </div>
-        </div>
-        <div class="hero-card">
-          <div class="pipe-visual">
-            <div class="pipe p1"></div><div class="pipe p2"></div><div class="pipe p3"></div>
-            <div class="gauge">WHENG<br><small>PLUMBING</small></div>
-          </div>
-          <div class="quick-box">
-            <span>오늘 문의가 많은 작업</span>
-            <strong>수전 교체 · 변기 누수 · 분배기 점검</strong>
-          </div>
-        </div>
-      </div>
-    </section>
+  <section id="quote" class="quote-section">
+    <div class="container quote-grid">
+      <div class="quote-copy"><span>FAST QUOTE</span><h2>사진으로 빠르게<br>견적 받아보세요.</h2><p>고장난 부분이 보이도록 사진을 올려주시면 작업 종류를 먼저 확인하고 연락드립니다.</p><ul><li>수원 · 화성 · 용인 · 오산</li><li>사진 최대 5장</li><li>방문 희망일 선택</li><li>상담 후 작업 확정</li></ul></div>
+      <form class="quote-form" id="quoteForm">
+        <div class="form-row"><label>지역<input required name="area" placeholder="예: 수원 권선구"></label><label>작업 종류<select name="service" required><option value="">선택</option><option>수전</option><option>변기</option><option>세면대</option><option>싱크대</option><option>누수</option><option>배관</option><option>보일러 분배기</option><option>기타</option></select></label></div>
+        <label>증상 설명<textarea required name="issue" rows="4" placeholder="증상을 간단히 적어주세요."></textarea></label>
+        <div class="form-row"><label>연락처<input required name="phone" placeholder="010-0000-0000"></label><label>희망 방문일<input name="date" type="date"></label></div>
+        <label class="upload">사진 첨부 <span>최대 5장 · 장당 5MB 이하</span><input name="photos" type="file" accept="image/*" multiple></label><div class="photo-preview" id="photoPreview"></div>
+        <details class="privacy-details"><summary>개인정보 수집·이용 내용 확인</summary><div><b>목적</b> 견적 상담·방문 일정 조율·문의 응대<br><b>항목</b> 지역·연락처·문의내용·희망일·첨부사진<br><b>보유</b> 상담 종료 후 3개월, 시공 고객은 완료 후 1년<br><b>거부권</b> 동의를 거부할 수 있으나 온라인 견적 접수가 제한됩니다.</div></details>
+        <label class="privacy"><input required type="checkbox"> <span>개인정보 수집·이용에 동의합니다. <a href="privacy.html" target="_blank">자세히 보기</a></span></label>
+        <button class="btn btn-primary full" type="submit">무료 견적 요청하기</button><p class="form-note" id="formNote"><span id="siteMode">실시간 접수 운영</span> · 확인 후 연락드립니다.</p>
+      </form>
+    </div>
+  </section>
 
-    <section class="stats-strip">
-      <div class="container stats-grid">
-        <div><b>01</b><span>사진 상담</span></div>
-        <div><b>02</b><span>견적 안내</span></div>
-        <div><b>03</b><span>방문 시공</span></div>
-        <div><b>04</b><span>완료 확인</span></div>
-      </div>
-    </section>
+  <section id="about" class="about-section"><div class="container about-box"><div><small>WHENG</small><h2>좋은 집, 더 좋은 세상을 만드는 생활설비</h2></div><p>수전 · 변기 · 세면대 · 배관 · 누수 · 보일러 분배기까지.<br>정직한 견적과 꼼꼼한 시공으로 함께하겠습니다.</p></div></section>
+</main>
 
-    <section id="services" class="section">
-      <div class="container">
-        <div class="section-head">
-          <div><span class="eyebrow dark">SERVICE & PRICE</span><h2>자주 찾는 생활설비</h2></div>
-          <p>정확한 금액은 현장 조건과 자재에 따라 달라질 수 있으며, 방문 전 가능한 범위에서 먼저 안내합니다.</p>
-        </div>
-        <div class="service-grid" id="serviceGrid"></div>
-        <div class="price-panel">
-          <div class="price-title"><span>예상 비용 안내</span><small>부품·현장 난이도에 따라 달라질 수 있습니다.</small></div>
-          <div class="price-list" id="priceList"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="cases" class="section soft">
-      <div class="container">
-        <div class="section-head"><div><span class="eyebrow dark">WORK CASES</span><h2>시공사례</h2></div><p>나중에는 관리자 페이지에서 사진과 작업 내용을 등록하면 자동으로 이곳에 올라오게 만들 수 있습니다.</p></div>
-        <div class="case-grid" id="caseGrid"></div>
-      </div>
-    </section>
-
-    <section id="quote" class="section quote-section">
-      <div class="container quote-grid">
-        <div class="quote-copy">
-          <span class="eyebrow">FAST QUOTE</span>
-          <h2>사진 한 장이면<br>상담이 훨씬 빨라집니다.</h2>
-          <p>고장난 부분이 보이도록 사진을 올려주세요. 작업 종류를 먼저 파악하고 상담 시간을 줄일 수 있습니다.</p>
-          <ul><li>지역</li><li>작업 종류</li><li>증상 설명</li><li>사진 최대 5장</li><li>연락처</li><li>희망 방문일</li></ul>
-        </div>
-        <form class="quote-form" id="quoteForm">
-          <div class="form-row"><label>지역<input required name="area" placeholder="예: 수원 권선구" /></label><label>작업 종류<select name="service" required><option value="">선택</option><option>수전</option><option>변기</option><option>세면대</option><option>싱크대</option><option>누수</option><option>배관</option><option>보일러 분배기</option><option>기타</option></select></label></div>
-          <label>증상 설명<textarea required name="issue" rows="4" placeholder="예: 싱크대 아래에서 물이 조금씩 떨어집니다."></textarea></label>
-          <div class="form-row"><label>연락처<input required name="phone" placeholder="010-0000-0000" /></label><label>희망 방문일<input name="date" type="date" /></label></div>
-          <label class="upload">사진 첨부 <span>최대 5장 · 장당 5MB 이하 권장</span><input name="photos" type="file" accept="image/*" multiple /></label><div class="photo-preview" id="photoPreview"></div>
-          <details class="privacy-details"><summary>개인정보 수집·이용 내용 확인</summary><div><b>목적</b> 견적 상담·방문 일정 조율·문의 응대<br><b>항목</b> 지역·연락처·문의내용·희망일·첨부사진<br><b>보유</b> 견적 문의는 상담 종료 후 3개월, 시공 고객은 시공 완료 후 1년(법령상 별도 보존 필요 시 해당 기간)<br><b>거부권</b> 동의를 거부할 수 있으나 온라인 견적 접수가 제한될 수 있습니다.</div></details><label class="privacy"><input required type="checkbox" /> <span>위 개인정보 수집·이용 내용에 동의합니다. <a href="privacy.html" target="_blank">자세히 보기</a></span></label>
-          <button class="btn btn-primary full" type="submit">무료 견적 요청하기</button>
-          <p class="form-note" id="formNote"><span id="siteMode">데모 모드</span> · 사진과 내용을 확인한 뒤 상담 연락을 드립니다.</p>
-        </form>
-      </div>
-    </section>
-
-    <section id="about" class="section">
-      <div class="container about-grid">
-        <div class="about-block"><span class="eyebrow dark">WHY WHENG</span><h2>작업보다 먼저,<br>원인을 봅니다.</h2><p>설비 문제는 증상이 같아 보여도 원인이 다를 수 있습니다. WHENG는 무조건 교체부터 권하기보다 점검 → 원인 확인 → 필요한 작업 안내 순서로 접근합니다.</p></div>
-        <div class="promise-grid"><div><b>01</b><h3>과잉 작업 최소화</h3><p>필요한 범위부터 확인합니다.</p></div><div><b>02</b><h3>비용 사전 안내</h3><p>가능한 작업은 방문 전 범위를 설명합니다.</p></div><div><b>03</b><h3>작업 기록</h3><p>시공 전·후 상태를 남깁니다.</p></div><div><b>04</b><h3>지역 밀착</h3><p>수도권 남부 중심으로 빠르게 대응합니다.</p></div></div>
-      </div>
-    </section>
-
-    <section id="good" class="section good-section">
-      <div class="container good-grid">
-        <div><span class="eyebrow">WHENG SHARE</span><h2>설비 기술로<br>도움이 필요한 곳에.</h2><p>WHENG는 유기견 보호단체 지원과 취약계층 무료 시공 활동을 실제 실행 내역 중심으로 공개하는 방향을 지향합니다.</p></div>
-        <div class="good-card"><strong>준비 중인 활동</strong><div>유기견 보호단체 후원</div><div>취약계층 생활설비 무료 시공</div><div>기부·시공 내역 공개</div></div>
-      </div>
-    </section>
-
-    <section class="cta-section">
-      <div class="container cta-box"><div><small>갑자기 생긴 설비 문제라면</small><h2>사진부터 보내주세요.</h2></div><div class="cta-actions"><a class="btn btn-primary" href="#quote">빠른 견적</a><a class="btn btn-light" data-phone-link href="tel:01000000000">전화 상담</a></div></div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-grid"><div><div class="brand footer-brand"><span class="brand-mark">W</span><span class="brand-text">WHENG</span></div><p>생활설비 · 누수 · 배관 · 수전 · 변기 · 보일러 분배기</p></div><div><b>서비스 지역</b><p data-service-areas>수원 · 화성 · 용인 · 오산 외 협의</p></div><div><b>고객센터</b><p data-phone-display>010-0000-0000</p><p>상담시간 추후 설정</p></div></div>
-    <div class="container foot-bottom"><span>© 2026 WHENG. All rights reserved.</span><a href="admin.html">관리자</a></div>
-  </footer>
-
-  <div class="floating"><a data-phone-link href="tel:01000000000" class="float-call">☎</a><a href="#quote" class="float-quote">견적</a></div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+<footer><div class="container footer-row"><div><strong>WHENG</strong><p>생활설비 전문 시공업체</p></div><div><b>서비스 지역</b><p data-service-areas>수원 · 화성 · 용인 · 오산 외 협의</p></div><div><b>고객센터</b><p data-phone-display>010-0000-0000</p></div></div><div class="container foot-bottom"><span>© 2026 WHENG. All rights reserved.</span><a href="admin.html">관리자</a></div></footer>
+<div class="floating"><a data-phone-link href="tel:01000000000">☎</a><a href="#quote">견적</a></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script><script src="config.js"></script><script src="data.js"></script><script src="app.js"></script>
+</body></html>
