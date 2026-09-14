@@ -13,12 +13,14 @@ document.querySelectorAll('[data-open-quote]').forEach(el=>el.addEventListener('
 document.querySelectorAll('[data-close-quote]').forEach(el=>el.addEventListener('click',closeQuote));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal?.classList.contains('hidden'))closeQuote()});
 
+const phoneDialog=document.createElement('dialog');
+phoneDialog.className='phone-dialog';phoneDialog.setAttribute('aria-label','상담 전화번호');
+const phoneNumber=document.createElement('p');phoneNumber.textContent=cfg.phoneDisplay||'010-2239-1118';
+const phoneClose=document.createElement('button');phoneClose.type='button';phoneClose.className='phone-close';phoneClose.setAttribute('aria-label','전화번호 닫기');phoneClose.textContent='×';
+phoneClose.onclick=()=>phoneDialog.close();phoneDialog.append(phoneClose,phoneNumber);document.body.append(phoneDialog);
+phoneDialog.addEventListener('click',e=>{if(e.target===phoneDialog){const r=phoneDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)phoneDialog.close()}});
 document.querySelectorAll('a[data-phone-link]').forEach(el=>{
-  if(phoneTel&&phoneTel!=='01000000000') el.href=`tel:${phoneTel}`;
-  else{
-    el.href='#quote';
-    el.addEventListener('click',e=>{e.preventDefault();openQuote();const note=document.getElementById('formNote');if(note){note.textContent='전화번호 등록 전입니다. 견적을 남겨주시면 확인 후 연락드리겠습니다.';note.className='form-note'}})
-  }
+ el.addEventListener('click',e=>{e.preventDefault();if(!phoneDialog.open)phoneDialog.showModal()});
 });
 document.querySelectorAll('[data-phone-display]').forEach(el=>el.textContent=cfg.phoneDisplay||'010-2239-1118');
 document.querySelectorAll('[data-service-areas]').forEach(el=>el.textContent=cfg.serviceAreas||'수원 · 화성 · 용인 · 오산 외 협의');
