@@ -4,7 +4,7 @@ window.WHENG_CONFIG = {
   adminEmail: 'admin@wheng.local',
   phoneDisplay: '010-2239-1118',
   phoneTel: '01022391118',
-  kakaoUrl: 'https://pf.kakao.com/_jprrX/chat',
+  kakaoUrl: 'https://pf.kakao.com/_sxorrX/chat',
   businessName: 'WHENG 생활설비',
   serviceAreas: '수원 · 화성 · 용인 · 오산 외 협의'
 };
