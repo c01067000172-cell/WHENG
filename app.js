@@ -88,3 +88,6 @@ form?.addEventListener('submit',async e=>{
     note.textContent=WHENG_DATA.mode==='supabase'?'견적 요청이 정상 접수되었습니다. 확인 후 연락드리겠습니다.':'데모 접수 완료.';note.className='form-note success';form.reset();photoPreview.innerHTML='';btn.textContent='무료 견적 요청하기';
   }catch(err){console.error(err);note.textContent=`접수 실패: ${err.message||'잠시 후 다시 시도해주세요.'}`;note.className='form-note error';btn.textContent='다시 접수하기'}finally{btn.disabled=false}
 });
+if(cfg.kakaoUrl){
+ try{const url=new URL(cfg.kakaoUrl);if(url.protocol==='https:'&&url.hostname==='pf.kakao.com')document.querySelectorAll('[data-kakao-link]').forEach(link=>link.href=url.href)}catch(_){}
+}
