@@ -8,7 +8,7 @@ function openQuote(){modal?.classList.remove('hidden');document.body.style.overf
 function closeQuote(){modal?.classList.add('hidden');document.body.style.overflow=''}
 
 menuBtn?.addEventListener('click',()=>{const open=mobileNav?.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(!!open))});
-document.querySelectorAll('.mobile-nav a,.mobile-nav button').forEach(el=>el.addEventListener('click',()=>mobileNav?.classList.remove('open')));
+document.querySelectorAll('.mobile-nav a,.mobile-nav button').forEach(el=>el.addEventListener('click',()=>{mobileNav?.classList.remove('open');menuBtn?.setAttribute('aria-expanded','false')}));
 document.querySelectorAll('[data-open-quote]').forEach(el=>el.addEventListener('click',openQuote));
 document.querySelectorAll('[data-close-quote]').forEach(el=>el.addEventListener('click',closeQuote));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal?.classList.contains('hidden'))closeQuote()});
@@ -20,9 +20,9 @@ document.querySelectorAll('a[data-phone-link]').forEach(el=>{
     el.addEventListener('click',e=>{e.preventDefault();openQuote();const note=document.getElementById('formNote');if(note){note.textContent='전화번호 등록 전입니다. 견적을 남겨주시면 확인 후 연락드리겠습니다.';note.className='form-note'}})
   }
 });
-document.querySelectorAll('[data-phone-display]').forEach(el=>el.textContent=cfg.phoneDisplay||'010-0000-0000');
+document.querySelectorAll('[data-phone-display]').forEach(el=>el.textContent=cfg.phoneDisplay||'010-2239-1118');
 document.querySelectorAll('[data-service-areas]').forEach(el=>el.textContent=cfg.serviceAreas||'수원 · 화성 · 용인 · 오산 외 협의');
-const mode=document.getElementById('siteMode');if(mode)mode.textContent=window.WHENG_DATA?.mode==='supabase'?'실시간 접수 운영':'데모 모드';
+const mode=document.getElementById('siteMode');if(mode)mode.textContent=window.WHENG_DATA?.mode==='supabase'?'실시간 접수 운영':window.WHENG_DATA?.mode==='unavailable'?'접수 서버 연결 실패':'데모 모드';
 
 function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 const caseDialog=document.createElement('dialog');caseDialog.className='case-dialog';caseDialog.setAttribute('aria-label','시공사례 상세');document.body.append(caseDialog);
@@ -39,10 +39,31 @@ async function renderCases(){
  }catch(e){grid.textContent='시공사례를 불러오지 못했습니다. ';const retry=document.createElement('button');retry.textContent='다시 불러오기';retry.onclick=renderCases;grid.append(retry)}
 }
 renderCases();
-document.querySelectorAll('.service-grid article').forEach(card=>{
- const button=document.createElement('button');button.type='button';button.className='service-button';button.innerHTML=card.innerHTML;button.onclick=()=>{openQuote();const select=document.querySelector('[name="service"]');const name=button.querySelector('h3').textContent;let option=[...select.options].find(o=>o.value===name);if(!option){option=new Option(name,name);select.add(option)}select.value=name};card.replaceWith(button);
-});
-
+function selectService(name){
+ openQuote();const select=document.querySelector('[name="service"]');
+ if(![...select.options].some(o=>o.value===name))select.add(new Option(name,name));
+ select.value=name;
+}
+async function renderServices(){
+ const grid=document.querySelector('.service-grid');if(!grid)return;
+ try{
+  const rows=await WHENG_DATA.getServices();const select=document.querySelector('[name="service"]');const previous=select.value;
+  select.replaceChildren(new Option('선택',''));grid.replaceChildren();
+  for(const row of rows){
+   select.add(new Option(row.name,row.name));
+   const button=document.createElement('button');button.type='button';button.className='service-button';
+   button.innerHTML=`<div class="service-icon" aria-hidden="true">🔧</div><h3>${esc(row.name)}</h3><p class="service-description">${esc(row.description||'')}</p><strong class="service-price">${esc(row.price_text||'상담 후 안내')}</strong>`;
+   button.onclick=()=>selectService(row.name);grid.append(button);
+  }
+  if(!rows.some(row=>row.name==='기타'))select.add(new Option('기타','기타'));
+  if([...select.options].some(o=>o.value===previous))select.value=previous;
+  if(!rows.length)grid.textContent='서비스 안내를 준비 중입니다. 전화 또는 견적으로 문의해주세요.';
+ }catch(e){
+  grid.replaceChildren();const message=document.createElement('p');message.textContent='서비스 안내를 불러오지 못했습니다.';
+  const retry=document.createElement('button');retry.type='button';retry.textContent='다시 불러오기';retry.onclick=renderServices;grid.append(message,retry);
+ }
+}
+renderServices();
 
 const photoInput=document.querySelector('input[name="photos"]');
 const photoPreview=document.getElementById('photoPreview');

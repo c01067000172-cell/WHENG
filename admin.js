@@ -114,8 +114,24 @@ window.editCase=id=>{
 window.removeCase=async id=>{if(confirm('삭제할까요?')){await WHENG_DATA.deleteCase(id);await refreshAll()}};
 
 function renderSystem(){
-  $('#systemMode').textContent=WHENG_DATA.mode==='supabase'?'Supabase 실시간 DB 연결됨':'로컬 데모 저장소 사용 중';
-  $('#systemConfig').textContent=WHENG_DATA.mode==='supabase'?'운영 접수 가능':'WHENG 전용 Supabase URL·Publishable Key를 config.js에 입력하면 실시간 DB로 전환됩니다.';
+  $('#systemMode').textContent=WHENG_DATA.mode==='supabase'?'서버 데이터 조회 완료':'로컬 데모 저장소 사용 중';
+  $('#systemConfig').textContent=WHENG_DATA.mode==='supabase'?'마지막 조회: '+new Date().toLocaleString('ko-KR'):'WHENG 전용 Supabase URL·Publishable Key를 config.js에 입력하면 실시간 DB로 전환됩니다.';
 }
 $('#refreshBtn').onclick=()=>runAction(async()=>{adminNotice('불러오는 중입니다…');await refreshAll();adminNotice('최신 내용으로 새로고침했습니다.')});
 init().catch(()=>{showLogin();$('#loginMsg').textContent='로그인 상태를 확인하지 못했습니다. 다시 로그인해주세요.';$('#loginMsg').className='error';});
+
+// Prevent duplicate saves; restore the button even when an upload or save fails.
+document.getElementById('drawerBody').addEventListener('click',async event=>{
+ const button=event.target.closest('#svcSave,#caseSave,#saveQuoteBtn');
+ if(!button)return;
+ event.stopImmediatePropagation();
+ if(button.disabled)return;
+ const handler=button.onclick;if(!handler)return;
+ const label=button.textContent;button.disabled=true;
+ try{
+  if(button.id==='svcSave'&&!document.getElementById('svcName').value.trim())throw new Error('서비스명을 입력해주세요.');
+  if(button.id==='caseSave'&&!document.getElementById('caseTitle').value.trim())throw new Error('시공사례 제목을 입력해주세요.');
+  button.textContent='저장 중…';await handler();
+ }catch(error){adminNotice(error.message||'저장하지 못했습니다. 다시 시도해주세요.',true);}
+ finally{button.disabled=false;button.textContent=label;}
+},true);

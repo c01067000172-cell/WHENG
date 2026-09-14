@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=clickfix-20260912">
+  <link rel="stylesheet" href="styles.css?v=contact-20260914">
   <link rel="stylesheet" href="hero-fix.css?v=20260912-approved">
 </head>
 <body>
@@ -28,10 +28,10 @@
       <a href="#reviews">고객후기</a>
       <a href="#about">WHENG 소개</a>
     </nav>
-    <a class="nav-call" data-phone-link href="tel:01000000000">☎ 전화 상담</a>
-    <button class="menu-btn" type="button" aria-label="메뉴 열기">☰</button>
+    <a class="nav-call" data-phone-link href="tel:01022391118">☎ 전화 상담</a>
+    <button class="menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mobileNav">☰</button>
   </div>
-  <div class="mobile-nav">
+  <div class="mobile-nav" id="mobileNav">
     <a href="#services">서비스</a><a href="#cases">시공사례</a><a href="#reviews">고객후기</a><a href="#about">WHENG 소개</a><button type="button" data-open-quote>빠른 견적</button>
   </div>
 </header>
@@ -46,7 +46,7 @@
         <p class="hero-line">고치는 것은 <strong>설비</strong>, 이어지는 것은 <strong>사람의 마음</strong>입니다.</p>
         <div class="hero-actions">
           <button class="btn btn-primary" type="button" data-open-quote>▣ 빠른 견적 받기 <b>→</b></button>
-          <a class="btn btn-outline" data-phone-link href="tel:01000000000">☎ 전화 상담 <b>→</b></a>
+          <a class="btn btn-outline" data-phone-link href="tel:01022391118">☎ 전화 상담 <b>→</b></a>
         </div>
       </div>
       <div class="hero-visual">
@@ -96,10 +96,7 @@
 
       <section class="panel" id="reviews">
         <div class="panel-head"><h2>고객후기</h2><span>WHENG</span></div>
-        <div class="review-grid">
-          <article><div class="stars">★★★★★</div><p>상담부터 작업까지 친절하고 깔끔했어요. 필요한 부분을 먼저 설명해 주셔서 믿음이 갔습니다.</p><small>WHENG 고객</small></article>
-          <article><div class="stars">★★★★★</div><p>급하게 연락드렸는데 꼼꼼하게 확인해 주셨습니다. 작업 후 설명도 이해하기 쉬웠어요.</p><small>WHENG 고객</small></article>
-        </div>
+        <div class="review-grid"><article><p>고객후기를 준비 중입니다.</p><small>실제 고객의 동의를 받은 후기를 소개하겠습니다.</small></article></div>
       </section>
     </div>
   </section>
@@ -116,12 +113,12 @@
   <div class="container footer-row">
     <div><strong>WHENG</strong><p>생활설비 전문 시공업체</p></div>
     <div><b>서비스 지역</b><p data-service-areas>수원 · 화성 · 용인 · 오산 외 협의</p></div>
-    <div><b>고객센터</b><p data-phone-display>010-0000-0000</p></div>
+    <div><b>고객센터</b><p><a data-phone-link data-phone-display href="tel:01022391118">010-2239-1118</a></p></div>
   </div>
   <div class="container foot-bottom"><span>© 2026 WHENG. All rights reserved.</span><a href="admin.html">관리자</a></div>
 </footer>
 
-<div class="floating"><a data-phone-link href="tel:01000000000" aria-label="전화">☎</a><button data-open-quote type="button">견적</button></div>
+<div class="floating"><a data-phone-link href="tel:01022391118" aria-label="전화">☎</a><button data-open-quote type="button">견적</button></div>
 
 <div id="quoteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
   <div class="modal-backdrop" data-close-quote></div>
@@ -136,12 +133,12 @@
       <details class="privacy-details"><summary>개인정보 수집·이용 내용</summary><div><b>목적</b> 견적 상담·방문 일정 조율·문의 응대<br><b>항목</b> 지역·연락처·문의내용·희망일·첨부사진<br><b>보유</b> 상담 종료 후 3개월, 시공 고객은 시공 완료 후 1년</div></details>
       <label class="privacy"><input required type="checkbox"> 개인정보 수집·이용에 동의합니다.</label>
       <button class="submit-btn" type="submit">무료 견적 요청하기</button>
-      <p id="formNote" class="form-note"><span id="siteMode">실시간 접수 운영</span> · 확인 후 연락드리겠습니다.</p>
+      <p id="formNote" class="form-note" role="status" aria-live="polite"><span id="siteMode">실시간 접수 운영</span> · 확인 후 연락드리겠습니다.</p>
     </form>
   </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
-<script src="config.js"></script><script src="data.js"></script><script src="app.js?v=clickfix-20260912"></script>
+<script src="config.js?v=contact-20260914"></script><script src="data.js?v=contact-20260914"></script><script src="app.js?v=contact-20260914"></script>
 </body>
 </html>

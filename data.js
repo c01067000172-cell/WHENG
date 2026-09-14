@@ -187,4 +187,12 @@
   }
 
   window.WHENG_DATA={mode:remote?'supabase':'demo',remote,getServices,getCases,createQuote,signIn,bootstrapAdmin,signOut,getSession,setDemoSession,getQuotes,updateQuote,deleteQuote,saveService,deleteService,saveCase,deleteCase,getPhotoSignedUrl,getQuotePhotos,uploadCaseImage};
+  // A configured production site must never report browser-only demo submissions as received.
+  if((cfg.supabaseUrl || cfg.supabasePublishableKey) && !remote){
+    window.WHENG_DATA.mode='unavailable';
+    for(const [name,value] of Object.entries(window.WHENG_DATA)){
+      if(typeof value==='function')window.WHENG_DATA[name]=async()=>{throw new Error('접수 서버에 연결하지 못했습니다. 새로고침하거나 010-2239-1118로 전화해주세요.');};
+    }
+  }
+
 })();
