@@ -104,6 +104,31 @@ window.removeService=async id=>{if(confirm('삭제할까요?')){await WHENG_DATA
 function renderCases(){
   $('#caseRows').innerHTML=cases.map(x=>`<tr><td>${x.sort_order}</td><td>${esc(x.area)}</td><td>${esc(x.category)}</td><td><b>${esc(x.title)}</b><br><small>${esc(x.summary)}</small></td><td>${x.active?'노출':'숨김'}</td><td><div class="row-actions"><button onclick="editCase('${x.id}')">수정</button><button onclick="removeCase('${x.id}')">삭제</button></div></td></tr>`).join('');
 }
+// Build copy only from the selected existing case; never use private quote data.
+function promotionDraft(x){
+  const title=String(x.title||'').trim();
+  const area=String(x.area||'').trim();
+  const heading=(area&&!title.includes(area)?area+' ':'')+title;
+  return [heading,String(x.summary||'').trim(),'사랑을실은설비공 · WHENG',new URL('index.html#cases',location.href).href].filter(Boolean).join('\n\n');
+}
+function addPromotionButtons(){
+  document.querySelectorAll('#caseRows tr').forEach((row,i)=>{
+    const x=cases[i];if(!x||!x.active||row.querySelector('[data-promotion]'))return;
+    const button=document.createElement('button');button.type='button';button.dataset.promotion='true';button.textContent='홍보 초안';
+    button.addEventListener('click',()=>{
+      $('#drawerTitle').textContent='홍보 초안 · 게시 전 검토';
+      const body=$('#drawerBody');body.replaceChildren();
+      const note=document.createElement('p');note.textContent='등록된 공개 시공사례만 사용한 초안입니다. 고객 개인정보·사진 사용 동의를 확인하세요. 외부 채널에는 아직 게시하지 않았습니다.';
+      const label=document.createElement('label');label.className='field';label.textContent='홍보 문구';
+      const text=document.createElement('textarea');text.rows=10;text.value=promotionDraft(x);label.append(text);
+      const copy=document.createElement('button');copy.className='btn btn-primary';copy.textContent='검토한 문구 복사';
+      copy.onclick=async()=>{try{await navigator.clipboard.writeText(text.value);adminNotice('복사했습니다. 외부 게시 여부는 해당 채널에서 확인하세요.')}catch{ text.focus();text.select();adminNotice('자동 복사를 사용할 수 없습니다. 선택된 문구를 복사해주세요.',true)}};
+      body.append(note,label,copy);$('#drawer').classList.remove('hidden');
+    });
+    row.querySelector('.row-actions')?.append(button);
+  });
+}
+new MutationObserver(addPromotionButtons).observe(document.getElementById('caseRows'),{childList:true});
 $('#newCaseBtn').onclick=()=>editCase();
 window.editCase=id=>{
   const x=cases.find(v=>v.id===id)||{id:'',title:'',area:'',category:'',summary:'',image_url:'',sort_order:100,active:true};
