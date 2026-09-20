@@ -106,8 +106,8 @@ function renderCases(){
 }
 function configuredNaverBlogId(){return String(window.WHENG_CONFIG?.naverBlogId||'').trim();}
 function configuredNaverBlogUrl(){return String(window.WHENG_CONFIG?.naverBlogUrl||('https://blog.naver.com/'+configuredNaverBlogId())).trim();}
-function naverShareUrl(title){
-  const target=new URL('index.html#cases',location.href).href;
+function naverShareUrl(x,title){
+  const target='https://bcjhwlqvytphupxpzjlj.supabase.co/functions/v1/wheng-case-share?'+new URLSearchParams({id:String(x?.id||'')}).toString();
   return 'https://blog.naver.com/openapi/share?'+new URLSearchParams({
     url:target,
     title:String(title||'')
@@ -149,6 +149,31 @@ function addPromotionButtons(){
       if(x.image_url){
         const imageLink=document.createElement('a');imageLink.className='btn btn-light';imageLink.target='_blank';imageLink.rel='noopener noreferrer';
         imageLink.href=x.image_url;imageLink.textContent='시공 사진 열기';body.append(imageLink);
+
+        const copyImage=document.createElement('button');copyImage.className='btn btn-light full';copyImage.type='button';copyImage.textContent='시공 사진 복사';
+        copyImage.onclick=async()=>{
+          try{
+            if(!navigator.clipboard?.write||typeof ClipboardItem==='undefined')throw new Error('clipboard image unsupported');
+            const response=await fetch(x.image_url,{mode:'cors'});
+            if(!response.ok)throw new Error('image fetch failed');
+            const blob=await response.blob();
+            let itemBlob=blob;
+            let type=blob.type||'image/png';
+            if(!/^image\//.test(type))throw new Error('not image');
+            if(type!=='image/png'){
+              const bitmap=await createImageBitmap(blob);
+              const canvas=document.createElement('canvas');canvas.width=bitmap.width;canvas.height=bitmap.height;
+              const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0);
+              itemBlob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('convert failed')),'image/png'));
+              type='image/png';
+            }
+            await navigator.clipboard.write([new ClipboardItem({[type]:itemBlob})]);
+            adminNotice('시공 사진을 복사했습니다. 네이버 글 본문에서 Ctrl+V로 붙여넣으세요.');
+          }catch(e){
+            adminNotice('사진 자동 복사가 제한됐습니다. 시공 사진 열기에서 저장/복사 후 네이버에 추가해주세요.',true);
+          }
+        };
+        body.append(copyImage);
       }
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
@@ -162,7 +187,7 @@ function addPromotionButtons(){
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
       publish.textContent='3. 네이버 공식 공유창 열기 + 본문 복사';
       publish.onclick=async()=>{
-        const opened=window.open(naverShareUrl(titleInput.value),'_blank','noopener,noreferrer');
+        const opened=window.open(naverShareUrl(x,titleInput.value),'_blank','noopener,noreferrer');
         try{await navigator.clipboard.writeText(text.value);adminNotice('본문을 복사했습니다. 공유창의 내용란에 붙여넣고 게시해주세요. 반드시 solbi081 계정인지 확인하세요.')}
         catch{ text.focus();text.select();adminNotice('본문을 선택했습니다. Ctrl+C로 복사 후 네이버 공유창에 붙여넣어주세요.',true)}
         try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
