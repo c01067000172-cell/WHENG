@@ -160,8 +160,11 @@ function addPromotionButtons(){
       body.append(copyTitle);
 
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='3. 전체 본문 복사 + 네이버 글쓰기 바로 열기';
+      publish.textContent='3. 전체 본문 복사 + solbi081 글쓰기 바로 열기';
       publish.onclick=async()=>{
+        const writeUrl='https://blog.naver.com/'+encodeURIComponent(configuredNaverBlogId())+'?Redirect=Write&categoryNo=0';
+        // 팝업 차단을 피하려면 사용자 클릭 이벤트 안에서 새 창을 먼저 열어야 합니다.
+        const opened=window.open(writeUrl,'_blank');
         let copied=false;
         try{
           await navigator.clipboard.writeText(text.value);
@@ -170,14 +173,13 @@ function addPromotionButtons(){
           text.focus();
           text.select();
         }
-        const opened=window.open('https://blog.naver.com/GoBlogWrite.naver','_blank','noopener,noreferrer');
         if(copied){
-          adminNotice('전체 본문을 복사했고 네이버 글쓰기 화면을 열었습니다. 본문 입력칸을 한 번 클릭한 뒤 Ctrl+V만 누르면 됩니다.');
+          adminNotice('전체 본문을 복사했고 solbi081 글쓰기 화면을 열었습니다. 본문 입력칸을 클릭한 뒤 Ctrl+V만 누르면 됩니다.');
         }else{
-          adminNotice('본문을 선택했습니다. Ctrl+C 후 네이버 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V 해주세요.',true);
+          adminNotice('본문을 선택했습니다. Ctrl+C 후 열린 solbi081 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V 해주세요.',true);
         }
         try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
-        if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 wheng.onrender.com 팝업을 허용해주세요.',true);
+        if(!opened)adminNotice('새 창이 차단되었습니다. 브라우저 주소창 오른쪽의 팝업 차단 아이콘에서 wheng.onrender.com을 허용해주세요.',true);
       };
       body.append(publish);
 
