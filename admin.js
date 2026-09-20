@@ -116,6 +116,14 @@ function naverShareUrl(title){
 function naverBlogHomeUrl(){
   return configuredNaverBlogUrl();
 }
+function whengSiteUrl(){
+  return String(window.WHENG_CONFIG?.siteUrl||'https://wheng.onrender.com/').trim();
+}
+function encodeWhengPayload(value){
+  const bytes=new TextEncoder().encode(JSON.stringify(value));
+  let binary='';for(const b of bytes)binary+=String.fromCharCode(b);
+  return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+}
 function isConfiguredNaverPostUrl(value){
   const id=configuredNaverBlogId().toLowerCase();
   if(!id)return true;
@@ -144,7 +152,10 @@ function addPromotionButtons(){
       const titleInput=document.createElement('input');titleInput.value=x.blog_title||draft.blog_title;titleLabel.append(titleInput);body.append(titleLabel);
 
       const textLabel=document.createElement('label');textLabel.className='field';textLabel.textContent='블로그 본문';
-      const text=document.createElement('textarea');text.rows=14;text.value=x.blog_body||draft.blog_body;textLabel.append(text);body.append(textLabel);
+      const text=document.createElement('textarea');text.rows=14;
+      let preparedBody=x.blog_body||draft.blog_body;
+      if(!preparedBody.includes(whengSiteUrl())) preparedBody=preparedBody.trim()+'\n\n공식 사이트: '+whengSiteUrl();
+      text.value=preparedBody;textLabel.append(text);body.append(textLabel);
 
       if(x.image_url){
         const imageLink=document.createElement('a');imageLink.className='btn btn-light';imageLink.target='_blank';imageLink.rel='noopener noreferrer';
@@ -153,33 +164,42 @@ function addPromotionButtons(){
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
       accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 확인';body.append(accountCheck);
-      const warning=document.createElement('div');warning.className='notice';warning.textContent='버튼을 누르면 전체 본문을 클립보드에 복사한 뒤 네이버 블로그 글쓰기 화면까지 바로 엽니다. 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V만 누르면 됩니다.';body.append(warning);
+      const warning=document.createElement('div');warning.className='notice';warning.textContent='WHENG 네이버 도우미가 설치되어 있으면 아래 버튼 한 번으로 제목·본문·공식 사이트 링크·시공 사진을 네이버 글쓰기 화면에 자동으로 불러옵니다. 도우미가 없을 때도 본문은 클립보드에 복사됩니다.';body.append(warning);
 
       const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='2. 제목 복사';
       copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
       body.append(copyTitle);
 
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='3. 전체 본문 복사 + solbi081 글쓰기 바로 열기';
+      publish.textContent='3. 제목·본문·링크·사진 준비 + 네이버 글쓰기';
       publish.onclick=async()=>{
-        const writeUrl='https://blog.naver.com/'+encodeURIComponent(configuredNaverBlogId())+'?Redirect=Write&categoryNo=0';
-        // 팝업 차단을 피하려면 사용자 클릭 이벤트 안에서 새 창을 먼저 열어야 합니다.
+        const payload={
+          v:1,
+          title:titleInput.value.trim(),
+          body:text.value.trim(),
+          siteUrl:whengSiteUrl(),
+          imageUrl:String(x.image_url||'').trim(),
+          caseId:String(x.id||''),
+          createdAt:Date.now()
+        };
+        const writeUrl='https://blog.naver.com/'+encodeURIComponent(configuredNaverBlogId())+'?Redirect=Write&categoryNo=0#wheng='+encodeWhengPayload(payload);
+        // 사용자 클릭 안에서 먼저 새 창을 열어 팝업 차단을 최소화합니다.
         const opened=window.open(writeUrl,'_blank');
         let copied=false;
         try{
-          await navigator.clipboard.writeText(text.value);
+          await navigator.clipboard.writeText(payload.body);
           copied=true;
         }catch{
-          text.focus();
-          text.select();
+          text.focus();text.select();
         }
-        if(copied){
-          adminNotice('전체 본문을 복사했고 solbi081 글쓰기 화면을 열었습니다. 본문 입력칸을 클릭한 뒤 Ctrl+V만 누르면 됩니다.');
+        try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:payload.title,blog_body:payload.body,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=payload.title;x.blog_body=payload.body;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
+        if(!opened){
+          adminNotice('새 창이 차단되었습니다. 브라우저 주소창 오른쪽의 팝업 차단 아이콘에서 wheng.onrender.com을 허용해주세요.',true);
+        }else if(copied){
+          adminNotice('네이버 글쓰기 화면을 열었습니다. WHENG 도우미가 설치되어 있으면 제목·본문·링크·사진이 자동 입력됩니다. 자동 입력이 안 되면 본문은 이미 복사되어 있습니다.');
         }else{
-          adminNotice('본문을 선택했습니다. Ctrl+C 후 열린 solbi081 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V 해주세요.',true);
+          adminNotice('네이버 글쓰기 화면을 열었습니다. 자동 입력이 안 되면 WHENG 네이버 도우미 설치 여부를 확인해주세요.',true);
         }
-        try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
-        if(!opened)adminNotice('새 창이 차단되었습니다. 브라우저 주소창 오른쪽의 팝업 차단 아이콘에서 wheng.onrender.com을 허용해주세요.',true);
       };
       body.append(publish);
 
