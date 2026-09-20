@@ -182,9 +182,10 @@ function addPromotionButtons(){
           caseId:String(x.id||''),
           createdAt:Date.now()
         };
-        const writeUrl='https://blog.naver.com/'+encodeURIComponent(configuredNaverBlogId())+'?Redirect=Write&categoryNo=0#wheng='+encodeWhengPayload(payload);
-        // 사용자 클릭 안에서 먼저 새 창을 열어 팝업 차단을 최소화합니다.
-        const opened=window.open(writeUrl,'_blank');
+        const helperUrl=new URL('naver-helper.html',location.href);
+        helperUrl.hash='wheng='+encodeWhengPayload(payload);
+        // WHENG 도우미 페이지가 확장 프로그램에 payload를 안전하게 넘긴 뒤 네이버 글쓰기로 이동합니다.
+        const opened=window.open(helperUrl.href,'_blank');
         let copied=false;
         try{
           await navigator.clipboard.writeText(payload.body);
