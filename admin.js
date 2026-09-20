@@ -106,9 +106,15 @@ function renderCases(){
 }
 function configuredNaverBlogId(){return String(window.WHENG_CONFIG?.naverBlogId||'').trim();}
 function configuredNaverBlogUrl(){return String(window.WHENG_CONFIG?.naverBlogUrl||('https://blog.naver.com/'+configuredNaverBlogId())).trim();}
-function naverShareUrl(x,title){
-  const target=new URL('index.html#cases',location.href).href;
-  return 'https://blog.naver.com/openapi/share?'+new URLSearchParams({url:target,title:String(title||'')}).toString();
+function naverWriteUrl(){
+  const id=configuredNaverBlogId();
+  return 'https://blog.naver.com/PostWriteForm.naver?'+new URLSearchParams({
+    blogId:id,
+    Redirect:'Write',
+    redirect:'Write',
+    widgetTypeCall:'true',
+    noTrackingCode:'true'
+  }).toString();
 }
 function isConfiguredNaverPostUrl(value){
   const id=configuredNaverBlogId().toLowerCase();
@@ -145,12 +151,16 @@ function addPromotionButtons(){
         imageLink.href=x.image_url;imageLink.textContent='시공 사진 열기';body.append(imageLink);
       }
 
+      const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='제목 복사';
+      copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
+      body.append(copyTitle);
+
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='본문 복사 + 네이버 블로그 열기';
+      publish.textContent=configuredNaverBlogId()+' 블로그 글쓰기 열기 + 본문 복사';
       publish.onclick=async()=>{
-        const share=naverShareUrl(x,titleInput.value);
-        const opened=window.open(share,'_blank','noopener,noreferrer');
-        try{await navigator.clipboard.writeText(text.value);adminNotice('블로그 본문을 복사했습니다. 네이버 글쓰기 화면에서 붙여넣고 게시해주세요.')}
+        const writeUrl=naverWriteUrl();
+        const opened=window.open(writeUrl,'_blank','noopener,noreferrer');
+        try{await navigator.clipboard.writeText(text.value);adminNotice(configuredNaverBlogId()+' 블로그 글쓰기 화면을 열었습니다. 본문을 붙여넣고 제목을 입력한 뒤 게시해주세요.')}
         catch{ text.focus();text.select();adminNotice('본문을 선택했습니다. Ctrl+C로 복사 후 네이버에 붙여넣어주세요.',true)}
         try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
         if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.',true);
