@@ -136,7 +136,7 @@ function addPromotionButtons(){
       const body=$('#drawerBody');body.replaceChildren();
 
       const note=document.createElement('p');
-      note.textContent='시공사례에 등록된 공개 정보만 사용해 블로그 초안을 자동 생성합니다. 지정 네이버 블로그: '+(configuredNaverBlogId()||'미설정')+'. 네이버 정책상 최종 게시 버튼은 네이버 화면에서 직접 눌러야 합니다.';
+      note.textContent='대상 블로그는 '+(configuredNaverBlogId()||'미설정')+' 입니다. 네이버 공유창은 WHENG가 계정을 강제로 바꾸지 못하고, 현재 브라우저에 로그인된 네이버 계정으로 게시됩니다. 현재 계정이 TWO J ROAD라면 먼저 네이버에서 로그아웃하고 '+configuredNaverBlogId()+'로 로그인한 뒤 진행하세요.';
       body.append(note);
       const targetBlog=document.createElement('a');targetBlog.className='btn btn-light full';targetBlog.target='_blank';targetBlog.rel='noopener noreferrer';targetBlog.href=configuredNaverBlogUrl();targetBlog.textContent='지정 블로그 확인 · '+(configuredNaverBlogId()||'네이버 블로그');body.append(targetBlog);
 
@@ -152,7 +152,8 @@ function addPromotionButtons(){
       }
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
-      accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 열어서 로그인 계정 확인';body.append(accountCheck);
+      accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 확인';body.append(accountCheck);
+      const warning=document.createElement('div');warning.className='notice';warning.textContent='중요: 아래 공유 버튼은 현재 네이버 로그인 계정으로 열립니다. TWO J ROAD 계정으로 로그인되어 있으면 solbi081로 계정 전환 후 사용하세요.';body.append(warning);
 
       const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='2. 제목 복사';
       copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
