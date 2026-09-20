@@ -333,54 +333,67 @@
       const { payload, status } = state;
       let changed = false;
 
+      // 1) 제목부터 확실히 입력
       if (!status.title) {
         const titleEl = findTitle();
         if (titleEl && replaceEditable(titleEl, String(payload.title || ''))) {
           status.title = true;
           changed = true;
           lastProgressAt = Date.now();
+          await saveStatus(status);
+          await sleep(500);
         }
       }
 
-      let bodyEl = findBody();
+      // 2) 사진을 먼저 올립니다.
+      // 네이버 SmartEditor ONE은 사진 첨부 시 최초 빈 본문 컴포넌트를
+      // 이미지 컴포넌트로 바꾸는 경우가 있어, 본문을 먼저 넣으면 사라질 수 있습니다.
+      if (status.title && !status.image) {
+        if (payload.imageUrl) {
+          const anchorBody = findBody();
+          if (await uploadImage(String(payload.imageUrl), anchorBody)) {
+            status.image = true;
+            changed = true;
+            lastProgressAt = Date.now();
+            await saveStatus(status);
+            await sleep(1800);
+          }
+        } else {
+          status.image = true;
+          changed = true;
+          await saveStatus(status);
+        }
+      }
 
-      if (!status.body && bodyEl) {
-        if (replaceEditable(bodyEl, withSiteLink(payload))) {
+      // 3) 사진이 자리 잡은 뒤 새 텍스트 영역을 찾아 본문 전체 입력
+      if (status.title && status.image && !status.body) {
+        const bodyEl = findBody();
+        if (bodyEl && replaceEditable(bodyEl, withSiteLink(payload))) {
           status.body = true;
           changed = true;
           lastProgressAt = Date.now();
+          await saveStatus(status);
         }
-      }
-
-      if (status.body && !status.image && payload.imageUrl) {
-        bodyEl = bodyEl || findBody();
-        if (await uploadImage(String(payload.imageUrl), bodyEl)) {
-          status.image = true;
-          changed = true;
-          lastProgressAt = Date.now();
-        }
-      } else if (!payload.imageUrl && !status.image) {
-        status.image = true;
-        changed = true;
       }
 
       if (changed) await saveStatus(status);
 
-      if (window.top === window && status.title && status.body) {
-        toast(
-          status.image
-            ? 'WHENG: 제목·본문·사이트 링크·시공사진을 불러왔습니다. 확인 후 직접 발행하세요.'
-            : 'WHENG: 제목·본문·사이트 링크 입력 완료. 시공사진을 계속 첨부 중입니다.'
-        );
+      if (window.top === window && status.title && status.image && status.body) {
+        toast('WHENG: 제목·시공사진·본문·사이트 링크까지 한 번에 입력했습니다. 내용 확인 후 직접 발행하세요.');
       } else if (
         window.top === window &&
-        Date.now() - lastProgressAt > 12000
+        Date.now() - lastProgressAt > 14000
       ) {
+        const missing = [
+          !status.title ? '제목' : '',
+          !status.image ? '사진' : '',
+          !status.body ? '본문' : ''
+        ].filter(Boolean).join('·');
         toast(
-          'WHENG: 네이버 편집기 입력 위치를 찾지 못했습니다. 확장 프로그램에서 다시 로드를 누른 뒤 이 글쓰기 화면을 새로고침해주세요.',
+          'WHENG: '+missing+' 입력을 다시 시도 중입니다. 5~10초만 기다려주세요.',
           true
         );
-        lastProgressAt = Date.now() + 60000;
+        lastProgressAt = Date.now();
       }
     } finally {
       busy = false;
