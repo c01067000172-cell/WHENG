@@ -155,10 +155,58 @@
     if(remote){ const {error}=await remote.from('wheng_services').delete().eq('id',id); if(error) throw error; return; }
     mutateLocal(data=>{data.services=data.services.filter(x=>x.id!==id)});
   }
+  function blogDraftForCase(row){
+    const title=String(row.title||'').trim();
+    const area=String(row.area||'').trim();
+    const category=String(row.category||'').trim();
+    const summary=String(row.summary||'').trim();
+    const blogTitle=[area,title].filter(Boolean).join(' ')+' | 사랑을실은설비공 WHENG';
+    const tags=[
+      '사랑을실은설비공','WHENG','설비','생활설비',
+      area.replace(/\s+/g,''),category.replace(/\s+/g,'')
+    ].filter(Boolean).map(x=>'#'+x.replace(/[^0-9A-Za-z가-힣_]/g,'')).filter(x=>x!=='#');
+    const body=[
+      area&&title ? area+'에서 진행한 '+title+' 시공사례입니다.' : title,
+      summary ? '[시공 내용]\n'+summary : '',
+      '[작업 정보]',
+      area ? '지역: '+area : '',
+      category ? '분류: '+category : '',
+      title ? '작업: '+title : '',
+      '',
+      '사랑을실은설비공 · WHENG',
+      '상담: '+String(cfg.phoneDisplay||'010-2239-1118'),
+      String(cfg.kakaoUrl||''),
+      tags.join(' ')
+    ].filter(Boolean).join('\n\n');
+    return {blog_title:blogTitle.trim(),blog_body:body.trim()};
+  }
+
   async function saveCase(row){
-    const clean={id:row.id||uid(),title:row.title,area:row.area||'',category:row.category||'',summary:row.summary||'',image_url:row.image_url||'',active:row.active!==false,sort_order:Number(row.sort_order)||100};
+    const draft=blogDraftForCase(row);
+    const clean={
+      id:row.id||uid(),title:row.title,area:row.area||'',category:row.category||'',
+      summary:row.summary||'',image_url:row.image_url||'',active:row.active!==false,
+      sort_order:Number(row.sort_order)||100,
+      blog_title:row.blog_title||draft.blog_title,
+      blog_body:row.blog_body||draft.blog_body,
+      blog_status:row.blog_status||'draft',
+      blog_url:row.blog_url||'',
+      blog_updated_at:now()
+    };
     if(remote){ const {error}=await remote.from('wheng_cases').upsert(clean); if(error) throw error; return clean; }
     return mutateLocal(data=>{ const i=data.cases.findIndex(x=>x.id===clean.id); if(i>=0)data.cases[i]={...data.cases[i],...clean};else data.cases.push({...clean,created_at:now()}); return clean; });
+  }
+
+  async function updateCaseBlog(id,patch){
+    const clean={
+      blog_title:String(patch.blog_title||''),
+      blog_body:String(patch.blog_body||''),
+      blog_status:['draft','ready','published'].includes(patch.blog_status)?patch.blog_status:'draft',
+      blog_url:String(patch.blog_url||''),
+      blog_updated_at:now()
+    };
+    if(remote){ const {error}=await remote.from('wheng_cases').update(clean).eq('id',id); if(error) throw error; return clean; }
+    return mutateLocal(data=>{const row=data.cases.find(x=>x.id===id);if(row)Object.assign(row,clean);return clean;});
   }
   async function deleteCase(id){
     if(remote){ const {error}=await remote.from('wheng_cases').delete().eq('id',id); if(error) throw error; return; }
@@ -186,7 +234,7 @@
     const {data,error}=await remote.from('wheng_quote_photos').select('*').eq('quote_id',quoteId); if(error) throw error; return data;
   }
 
-  window.WHENG_DATA={mode:remote?'supabase':'demo',remote,getServices,getCases,createQuote,signIn,bootstrapAdmin,signOut,getSession,setDemoSession,getQuotes,updateQuote,deleteQuote,saveService,deleteService,saveCase,deleteCase,getPhotoSignedUrl,getQuotePhotos,uploadCaseImage};
+  window.WHENG_DATA={mode:remote?'supabase':'demo',remote,getServices,getCases,createQuote,signIn,bootstrapAdmin,signOut,getSession,setDemoSession,getQuotes,updateQuote,deleteQuote,saveService,deleteService,saveCase,updateCaseBlog,deleteCase,getPhotoSignedUrl,getQuotePhotos,uploadCaseImage,blogDraftForCase};
   // A configured production site must never report browser-only demo submissions as received.
   if((cfg.supabaseUrl || cfg.supabasePublishableKey) && !remote){
     window.WHENG_DATA.mode='unavailable';
