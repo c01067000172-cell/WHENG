@@ -136,7 +136,7 @@ function addPromotionButtons(){
       const body=$('#drawerBody');body.replaceChildren();
 
       const note=document.createElement('p');
-      note.textContent='대상 블로그는 '+(configuredNaverBlogId()||'미설정')+' 입니다. 네이버 공유창은 WHENG가 계정을 강제로 바꾸지 못하고, 현재 브라우저에 로그인된 네이버 계정으로 게시됩니다. 현재 계정이 TWO J ROAD라면 먼저 네이버에서 로그아웃하고 '+configuredNaverBlogId()+'로 로그인한 뒤 진행하세요.';
+      note.textContent='대상 블로그는 '+(configuredNaverBlogId()||'미설정')+' 입니다. 네이버 공유창의 내용 입력은 500자 제한이 있어 긴 시공 설명이 잘릴 수 있으므로, 이제 공유창 대신 전체 본문을 복사한 뒤 '+configuredNaverBlogId()+' 블로그의 일반 글쓰기에서 붙여넣는 방식으로 사용합니다.';
       body.append(note);
       const targetBlog=document.createElement('a');targetBlog.className='btn btn-light full';targetBlog.target='_blank';targetBlog.rel='noopener noreferrer';targetBlog.href=configuredNaverBlogUrl();targetBlog.textContent='지정 블로그 확인 · '+(configuredNaverBlogId()||'네이버 블로그');body.append(targetBlog);
 
@@ -153,18 +153,18 @@ function addPromotionButtons(){
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
       accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 확인';body.append(accountCheck);
-      const warning=document.createElement('div');warning.className='notice';warning.textContent='중요: 아래 공유 버튼은 현재 네이버 로그인 계정으로 열립니다. TWO J ROAD 계정으로 로그인되어 있으면 solbi081로 계정 전환 후 사용하세요.';body.append(warning);
+      const warning=document.createElement('div');warning.className='notice';warning.textContent='중요: 전체 본문은 길이 제한 없이 복사됩니다. solbi081 블로그에서 글쓰기를 누른 뒤 본문에 Ctrl+V로 붙여넣으세요. 기존 공유창 방식은 500자 제한 때문에 사용하지 않습니다.';body.append(warning);
 
       const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='2. 제목 복사';
       copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
       body.append(copyTitle);
 
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='3. 네이버 공식 공유창 열기 + 본문 복사';
+      publish.textContent='3. 전체 본문 복사 + solbi081 블로그 열기';
       publish.onclick=async()=>{
-        const opened=window.open(naverShareUrl(titleInput.value),'_blank','noopener,noreferrer');
-        try{await navigator.clipboard.writeText(text.value);adminNotice('본문을 복사했습니다. 공유창의 내용란에 붙여넣고 게시해주세요. 반드시 solbi081 계정인지 확인하세요.')}
-        catch{ text.focus();text.select();adminNotice('본문을 선택했습니다. Ctrl+C로 복사 후 네이버 공유창에 붙여넣어주세요.',true)}
+        const opened=window.open(configuredNaverBlogUrl(),'_blank','noopener,noreferrer');
+        try{await navigator.clipboard.writeText(text.value);adminNotice('전체 본문을 복사했습니다. solbi081 블로그에서 글쓰기를 누른 뒤 본문에 Ctrl+V로 붙여넣으세요.')}
+        catch{ text.focus();text.select();adminNotice('전체 본문을 선택했습니다. Ctrl+C로 복사 후 solbi081 블로그 글쓰기에 붙여넣어주세요.',true)}
         try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
         if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.',true);
       };
