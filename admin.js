@@ -104,26 +104,66 @@ window.removeService=async id=>{if(confirm('삭제할까요?')){await WHENG_DATA
 function renderCases(){
   $('#caseRows').innerHTML=cases.map(x=>`<tr><td>${x.sort_order}</td><td>${esc(x.area)}</td><td>${esc(x.category)}</td><td><b>${esc(x.title)}</b><br><small>${esc(x.summary)}</small></td><td>${x.active?'노출':'숨김'}</td><td><div class="row-actions"><button onclick="editCase('${x.id}')">수정</button><button onclick="removeCase('${x.id}')">삭제</button></div></td></tr>`).join('');
 }
-// Build copy only from the selected existing case; never use private quote data.
-function promotionDraft(x){
-  const title=String(x.title||'').trim();
-  const area=String(x.area||'').trim();
-  const heading=(area&&!title.includes(area)?area+' ':'')+title;
-  return [heading,String(x.summary||'').trim(),'사랑을실은설비공 · WHENG',new URL('index.html#cases',location.href).href].filter(Boolean).join('\n\n');
+function naverShareUrl(x,title){
+  const target=new URL('index.html#cases',location.href).href;
+  return 'https://blog.naver.com/openapi/share?'+new URLSearchParams({url:target,title:String(title||'')}).toString();
 }
 function addPromotionButtons(){
   document.querySelectorAll('#caseRows tr').forEach((row,i)=>{
     const x=cases[i];if(!x||!x.active||row.querySelector('[data-promotion]'))return;
-    const button=document.createElement('button');button.type='button';button.dataset.promotion='true';button.textContent='홍보 초안';
+    const button=document.createElement('button');button.type='button';button.dataset.promotion='true';
+    button.textContent=x.blog_status==='published'?'블로그 게시완료':'네이버 블로그';
     button.addEventListener('click',()=>{
-      $('#drawerTitle').textContent='홍보 초안 · 게시 전 검토';
+      const draft=WHENG_DATA.blogDraftForCase(x);
+      $('#drawerTitle').textContent='네이버 블로그 · 시공사례 등록';
       const body=$('#drawerBody');body.replaceChildren();
-      const note=document.createElement('p');note.textContent='등록된 공개 시공사례만 사용한 초안입니다. 고객 개인정보·사진 사용 동의를 확인하세요. 외부 채널에는 아직 게시하지 않았습니다.';
-      const label=document.createElement('label');label.className='field';label.textContent='홍보 문구';
-      const text=document.createElement('textarea');text.rows=10;text.value=promotionDraft(x);label.append(text);
-      const copy=document.createElement('button');copy.className='btn btn-primary';copy.textContent='검토한 문구 복사';
-      copy.onclick=async()=>{try{await navigator.clipboard.writeText(text.value);adminNotice('복사했습니다. 외부 게시 여부는 해당 채널에서 확인하세요.')}catch{ text.focus();text.select();adminNotice('자동 복사를 사용할 수 없습니다. 선택된 문구를 복사해주세요.',true)}};
-      body.append(note,label,copy);$('#drawer').classList.remove('hidden');
+
+      const note=document.createElement('p');
+      note.textContent='시공사례에 등록된 공개 정보만 사용해 블로그 초안을 자동 생성합니다. 네이버 정책상 최종 게시 버튼은 네이버 화면에서 직접 눌러야 합니다.';
+      body.append(note);
+
+      const titleLabel=document.createElement('label');titleLabel.className='field';titleLabel.textContent='블로그 제목';
+      const titleInput=document.createElement('input');titleInput.value=x.blog_title||draft.blog_title;titleLabel.append(titleInput);body.append(titleLabel);
+
+      const textLabel=document.createElement('label');textLabel.className='field';textLabel.textContent='블로그 본문';
+      const text=document.createElement('textarea');text.rows=14;text.value=x.blog_body||draft.blog_body;textLabel.append(text);body.append(textLabel);
+
+      if(x.image_url){
+        const imageLink=document.createElement('a');imageLink.className='btn btn-light';imageLink.target='_blank';imageLink.rel='noopener noreferrer';
+        imageLink.href=x.image_url;imageLink.textContent='시공 사진 열기';body.append(imageLink);
+      }
+
+      const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
+      publish.textContent='본문 복사 + 네이버 블로그 열기';
+      publish.onclick=async()=>{
+        const share=naverShareUrl(x,titleInput.value);
+        const opened=window.open(share,'_blank','noopener,noreferrer');
+        try{await navigator.clipboard.writeText(text.value);adminNotice('블로그 본문을 복사했습니다. 네이버 글쓰기 화면에서 붙여넣고 게시해주세요.')}
+        catch{ text.focus();text.select();adminNotice('본문을 선택했습니다. Ctrl+C로 복사 후 네이버에 붙여넣어주세요.',true)}
+        try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
+        if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.',true);
+      };
+      body.append(publish);
+
+      const urlLabel=document.createElement('label');urlLabel.className='field';urlLabel.textContent='게시 후 실제 네이버 블로그 글 주소';
+      const urlInput=document.createElement('input');urlInput.type='url';urlInput.placeholder='https://blog.naver.com/...';urlInput.value=x.blog_url||'';urlLabel.append(urlInput);body.append(urlLabel);
+
+      const savePublished=document.createElement('button');savePublished.className='btn btn-dark full';savePublished.type='button';savePublished.textContent='게시 완료 URL 저장';
+      savePublished.onclick=async()=>{
+        const value=urlInput.value.trim();
+        let parsed;try{parsed=new URL(value)}catch{adminNotice('네이버 블로그 글 주소를 확인해주세요.',true);return}
+        if(parsed.protocol!=='https:'||!/(^|\.)blog\.naver\.com$/.test(parsed.hostname)){adminNotice('blog.naver.com의 실제 게시글 주소를 입력해주세요.',true);return}
+        await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'published',blog_url:value});
+        Object.assign(x,{blog_title:titleInput.value,blog_body:text.value,blog_status:'published',blog_url:value});
+        adminNotice('게시 완료 URL을 저장했습니다.');
+        closeDrawer();await refreshAll();
+      };
+      body.append(savePublished);
+
+      if(x.blog_url){
+        const openPublished=document.createElement('a');openPublished.className='btn btn-light full';openPublished.href=x.blog_url;openPublished.target='_blank';openPublished.rel='noopener noreferrer';openPublished.textContent='실제 블로그 글 열기';body.append(openPublished);
+      }
+      $('#drawer').classList.remove('hidden');
     });
     row.querySelector('.row-actions')?.append(button);
   });
@@ -134,7 +174,7 @@ window.editCase=id=>{
   const x=cases.find(v=>v.id===id)||{id:'',title:'',area:'',category:'',summary:'',image_url:'',sort_order:100,active:true};
   $('#drawerTitle').textContent=id?'시공사례 수정':'시공사례 추가';
   $('#drawerBody').innerHTML=`<div class="editor-grid"><label class="field">지역<input id="caseArea" value="${esc(x.area)}"></label><label class="field">분류<input id="caseCategory" value="${esc(x.category)}"></label></div><label class="field">제목<input id="caseTitle" value="${esc(x.title)}"></label><label class="field">설명<textarea id="caseSummary" rows="4">${esc(x.summary)}</textarea></label><label class="field">시공 사진<input id="caseImageFile" type="file" accept="image/*"><small class="muted">사진을 선택하면 업로드 후 사이트에 바로 반영됩니다.</small></label><label class="field">기존/외부 사진 URL<input id="caseImage" value="${esc(x.image_url||'')}" placeholder="사진 업로드 시 자동 입력"></label><div class="editor-grid"><label class="field">표시 순서<input id="caseOrder" type="number" value="${x.sort_order}"></label><label class="field">노출<select id="caseActive"><option value="true">노출</option><option value="false">숨김</option></select></label></div><button class="btn btn-primary full" id="caseSave">저장</button>`;
-  $('#caseActive').value=String(x.active!==false); $('#caseSave').onclick=async()=>{const id=x.id||crypto.randomUUID(); const file=$('#caseImageFile').files[0]; let imageUrl=$('#caseImage').value; if(file){$('#caseSave').textContent='사진 업로드 중...'; imageUrl=await WHENG_DATA.uploadCaseImage(file,id);} await WHENG_DATA.saveCase({id,area:$('#caseArea').value,category:$('#caseCategory').value,title:$('#caseTitle').value,summary:$('#caseSummary').value,image_url:imageUrl,sort_order:$('#caseOrder').value,active:$('#caseActive').value==='true'});closeDrawer();await refreshAll()}; $('#drawer').classList.remove('hidden');
+  $('#caseActive').value=String(x.active!==false); $('#caseSave').onclick=async()=>{const id=x.id||crypto.randomUUID(); const file=$('#caseImageFile').files[0]; let imageUrl=$('#caseImage').value; if(file){$('#caseSave').textContent='사진 업로드 중...'; imageUrl=await WHENG_DATA.uploadCaseImage(file,id);} await WHENG_DATA.saveCase({id,area:$('#caseArea').value,category:$('#caseCategory').value,title:$('#caseTitle').value,summary:$('#caseSummary').value,image_url:imageUrl,sort_order:$('#caseOrder').value,active:$('#caseActive').value==='true',blog_title:x.blog_title||'',blog_body:x.blog_body||'',blog_status:x.blog_status||'draft',blog_url:x.blog_url||''});closeDrawer();await refreshAll()}; $('#drawer').classList.remove('hidden');
 };
 window.removeCase=async id=>{if(confirm('삭제할까요?')){await WHENG_DATA.deleteCase(id);await refreshAll()}};
 
