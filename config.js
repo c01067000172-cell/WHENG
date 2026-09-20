@@ -6,5 +6,7 @@ window.WHENG_CONFIG = {
   phoneTel: '01022391118',
   kakaoUrl: 'https://pf.kakao.com/_sxorrX/chat',
   businessName: 'WHENG 생활설비',
+  naverBlogId: 'solbi081',
+  naverBlogUrl: 'https://blog.naver.com/solbi081',
   serviceAreas: '수원 · 화성 · 용인 · 오산 외 협의'
 };
