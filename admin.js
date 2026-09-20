@@ -104,9 +104,20 @@ window.removeService=async id=>{if(confirm('삭제할까요?')){await WHENG_DATA
 function renderCases(){
   $('#caseRows').innerHTML=cases.map(x=>`<tr><td>${x.sort_order}</td><td>${esc(x.area)}</td><td>${esc(x.category)}</td><td><b>${esc(x.title)}</b><br><small>${esc(x.summary)}</small></td><td>${x.active?'노출':'숨김'}</td><td><div class="row-actions"><button onclick="editCase('${x.id}')">수정</button><button onclick="removeCase('${x.id}')">삭제</button></div></td></tr>`).join('');
 }
+function configuredNaverBlogId(){return String(window.WHENG_CONFIG?.naverBlogId||'').trim();}
+function configuredNaverBlogUrl(){return String(window.WHENG_CONFIG?.naverBlogUrl||('https://blog.naver.com/'+configuredNaverBlogId())).trim();}
 function naverShareUrl(x,title){
   const target=new URL('index.html#cases',location.href).href;
   return 'https://blog.naver.com/openapi/share?'+new URLSearchParams({url:target,title:String(title||'')}).toString();
+}
+function isConfiguredNaverPostUrl(value){
+  const id=configuredNaverBlogId().toLowerCase();
+  if(!id)return true;
+  let u;try{u=new URL(value)}catch{return false}
+  if(u.protocol!=='https:'||!/(^|\.)blog\.naver\.com$/.test(u.hostname))return false;
+  const parts=u.pathname.split('/').filter(Boolean).map(x=>x.toLowerCase());
+  const queryId=String(u.searchParams.get('blogId')||'').toLowerCase();
+  return parts[0]===id||queryId===id;
 }
 function addPromotionButtons(){
   document.querySelectorAll('#caseRows tr').forEach((row,i)=>{
@@ -119,8 +130,9 @@ function addPromotionButtons(){
       const body=$('#drawerBody');body.replaceChildren();
 
       const note=document.createElement('p');
-      note.textContent='시공사례에 등록된 공개 정보만 사용해 블로그 초안을 자동 생성합니다. 네이버 정책상 최종 게시 버튼은 네이버 화면에서 직접 눌러야 합니다.';
+      note.textContent='시공사례에 등록된 공개 정보만 사용해 블로그 초안을 자동 생성합니다. 지정 네이버 블로그: '+(configuredNaverBlogId()||'미설정')+'. 네이버 정책상 최종 게시 버튼은 네이버 화면에서 직접 눌러야 합니다.';
       body.append(note);
+      const targetBlog=document.createElement('a');targetBlog.className='btn btn-light full';targetBlog.target='_blank';targetBlog.rel='noopener noreferrer';targetBlog.href=configuredNaverBlogUrl();targetBlog.textContent='지정 블로그 확인 · '+(configuredNaverBlogId()||'네이버 블로그');body.append(targetBlog);
 
       const titleLabel=document.createElement('label');titleLabel.className='field';titleLabel.textContent='블로그 제목';
       const titleInput=document.createElement('input');titleInput.value=x.blog_title||draft.blog_title;titleLabel.append(titleInput);body.append(titleLabel);
@@ -153,6 +165,7 @@ function addPromotionButtons(){
         const value=urlInput.value.trim();
         let parsed;try{parsed=new URL(value)}catch{adminNotice('네이버 블로그 글 주소를 확인해주세요.',true);return}
         if(parsed.protocol!=='https:'||!/(^|\.)blog\.naver\.com$/.test(parsed.hostname)){adminNotice('blog.naver.com의 실제 게시글 주소를 입력해주세요.',true);return}
+        if(!isConfiguredNaverPostUrl(value)){adminNotice('WHENG 지정 블로그는 '+configuredNaverBlogId()+' 입니다. 다른 네이버 블로그 글 주소는 저장할 수 없습니다.',true);return}
         await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'published',blog_url:value});
         Object.assign(x,{blog_title:titleInput.value,blog_body:text.value,blog_status:'published',blog_url:value});
         adminNotice('게시 완료 URL을 저장했습니다.');
