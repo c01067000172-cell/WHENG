@@ -176,6 +176,7 @@
       '사랑을실은설비공 · WHENG',
       '상담: '+String(cfg.phoneDisplay||'010-2239-1118'),
       String(cfg.kakaoUrl||''),
+      '공식 사이트: '+String(cfg.siteUrl||'https://wheng.onrender.com/'),
       tags.join(' ')
     ].filter(Boolean).join('\n\n');
     return {blog_title:blogTitle.trim(),blog_body:body.trim()};
