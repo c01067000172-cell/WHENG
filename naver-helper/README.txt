@@ -1,4 +1,4 @@
-WHENG Naver Blog Helper v1.1.0
+WHENG Naver Blog Helper v1.2.0
 
 기능
 - WHENG 관리자에서 네이버 블로그 버튼을 누르면 WHENG 연결 페이지를 거쳐 solbi081 글쓰기 화면으로 이동
@@ -9,7 +9,7 @@ WHENG Naver Blog Helper v1.1.0
 - 발행 버튼은 자동으로 누르지 않음
 
 업데이트 설치
-1. 기존 WHENG Naver Blog Helper 폴더를 새 v1.1.0 폴더로 교체합니다.
+1. 기존 WHENG Naver Blog Helper 폴더를 새 v1.2.0 폴더로 교체합니다.
 2. Edge: edge://extensions 를 엽니다.
 3. WHENG Naver Blog Helper 카드에서 '다시 로드'를 누릅니다.
 4. 버전이 1.1.0으로 표시되는지 확인합니다.
@@ -33,3 +33,9 @@ WHENG Naver Blog Helper v1.1.0
 주의
 - 네이버 로그인, 캡차, 발행은 직접 처리합니다.
 - 네이버 SmartEditor ONE 화면 구조가 바뀌면 셀렉터 업데이트가 필요할 수 있습니다.
+
+
+v1.2.0 변경사항
+- 네이버에서 사진 첨부 시 본문이 사라지는 현상 수정
+- 자동 입력 순서를 제목 → 시공사진 → 본문+사이트링크 순서로 변경
+- WHENG 버튼 한 번으로 전부 입력되도록 보강
