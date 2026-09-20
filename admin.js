@@ -153,20 +153,31 @@ function addPromotionButtons(){
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
       accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 확인';body.append(accountCheck);
-      const warning=document.createElement('div');warning.className='notice';warning.textContent='중요: 전체 본문은 길이 제한 없이 복사됩니다. solbi081 블로그에서 글쓰기를 누른 뒤 본문에 Ctrl+V로 붙여넣으세요. 기존 공유창 방식은 500자 제한 때문에 사용하지 않습니다.';body.append(warning);
+      const warning=document.createElement('div');warning.className='notice';warning.textContent='버튼을 누르면 전체 본문을 클립보드에 복사한 뒤 네이버 블로그 글쓰기 화면까지 바로 엽니다. 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V만 누르면 됩니다.';body.append(warning);
 
       const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='2. 제목 복사';
       copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
       body.append(copyTitle);
 
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='3. 전체 본문 복사 + solbi081 블로그 열기';
+      publish.textContent='3. 전체 본문 복사 + 네이버 글쓰기 바로 열기';
       publish.onclick=async()=>{
-        const opened=window.open(configuredNaverBlogUrl(),'_blank','noopener,noreferrer');
-        try{await navigator.clipboard.writeText(text.value);adminNotice('전체 본문을 복사했습니다. solbi081 블로그에서 글쓰기를 누른 뒤 본문에 Ctrl+V로 붙여넣으세요.')}
-        catch{ text.focus();text.select();adminNotice('전체 본문을 선택했습니다. Ctrl+C로 복사 후 solbi081 블로그 글쓰기에 붙여넣어주세요.',true)}
+        let copied=false;
+        try{
+          await navigator.clipboard.writeText(text.value);
+          copied=true;
+        }catch{
+          text.focus();
+          text.select();
+        }
+        const opened=window.open('https://blog.naver.com/GoBlogWrite.naver','_blank','noopener,noreferrer');
+        if(copied){
+          adminNotice('전체 본문을 복사했고 네이버 글쓰기 화면을 열었습니다. 본문 입력칸을 한 번 클릭한 뒤 Ctrl+V만 누르면 됩니다.');
+        }else{
+          adminNotice('본문을 선택했습니다. Ctrl+C 후 네이버 글쓰기 화면에서 본문 입력칸을 클릭하고 Ctrl+V 해주세요.',true);
+        }
         try{await WHENG_DATA.updateCaseBlog(x.id,{blog_title:titleInput.value,blog_body:text.value,blog_status:'ready',blog_url:x.blog_url||''});x.blog_status='ready';x.blog_title=titleInput.value;x.blog_body=text.value;}catch(e){adminNotice('블로그 초안 상태 저장 실패: '+(e.message||e),true)}
-        if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 팝업을 허용해주세요.',true);
+        if(!opened)adminNotice('팝업이 차단되었습니다. 브라우저에서 wheng.onrender.com 팝업을 허용해주세요.',true);
       };
       body.append(publish);
 
