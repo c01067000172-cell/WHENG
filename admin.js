@@ -247,3 +247,79 @@ document.getElementById('drawerBody').addEventListener('click',async event=>{
  }catch(error){adminNotice(error.message||'저장하지 못했습니다. 다시 시도해주세요.',true);}
  finally{button.disabled=false;button.textContent=label;}
 },true);
+
+// 관리자 비밀번호 변경 — 로그인된 Supabase 관리자 전용
+(function installAdminPasswordChange(){
+  const systemPanel=document.querySelector('#section-system .panel');
+  if(!systemPanel||document.getElementById('adminPasswordChangeForm'))return;
+
+  const wrap=document.createElement('div');
+  wrap.style.marginTop='22px';
+  wrap.style.paddingTop='18px';
+  wrap.style.borderTop='1px solid var(--line)';
+  wrap.innerHTML=`
+    <h3 style="margin:0 0 6px">관리자 비밀번호 변경</h3>
+    <p class="muted" style="margin:0 0 12px">새 비밀번호를 두 번 입력하면 현재 로그인된 WHENG 관리자 계정의 비밀번호가 변경됩니다.</p>
+    <form id="adminPasswordChangeForm">
+      <div class="editor-grid">
+        <label class="field">새 비밀번호
+          <input id="adminNewPassword" type="password" autocomplete="new-password" minlength="6" required placeholder="새 비밀번호">
+        </label>
+        <label class="field">새 비밀번호 확인
+          <input id="adminNewPasswordConfirm" type="password" autocomplete="new-password" minlength="6" required placeholder="한 번 더 입력">
+        </label>
+      </div>
+      <button class="btn btn-primary" id="adminPasswordChangeBtn" type="submit">비밀번호 변경</button>
+      <p id="adminPasswordChangeMsg" class="muted" style="margin:10px 0 0"></p>
+    </form>`;
+  systemPanel.append(wrap);
+
+  document.getElementById('adminPasswordChangeForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const password=document.getElementById('adminNewPassword').value;
+    const confirmPassword=document.getElementById('adminNewPasswordConfirm').value;
+    const msg=document.getElementById('adminPasswordChangeMsg');
+    const btn=document.getElementById('adminPasswordChangeBtn');
+
+    if(WHENG_DATA.mode!=='supabase'||!WHENG_DATA.remote){
+      msg.textContent='Supabase 실사용 모드에서만 변경할 수 있습니다.';
+      msg.className='error';
+      return;
+    }
+    if(password.length<6){
+      msg.textContent='비밀번호는 6자 이상 입력해주세요.';
+      msg.className='error';
+      return;
+    }
+    if(password!==confirmPassword){
+      msg.textContent='새 비밀번호가 서로 다릅니다.';
+      msg.className='error';
+      return;
+    }
+
+    btn.disabled=true;
+    btn.textContent='변경 중...';
+    msg.textContent='비밀번호를 변경하고 있습니다.';
+    msg.className='muted';
+    try{
+      const {error}=await WHENG_DATA.remote.auth.updateUser({password});
+      if(error)throw error;
+      msg.textContent='비밀번호가 변경되었습니다. 새 비밀번호로 다시 로그인해주세요.';
+      msg.className='success';
+      adminNotice('관리자 비밀번호가 변경되었습니다.');
+      setTimeout(async()=>{
+        await WHENG_DATA.signOut();
+        showLogin();
+        document.getElementById('loginMsg').textContent='새 비밀번호로 로그인해주세요.';
+        document.getElementById('loginMsg').className='success';
+      },900);
+    }catch(err){
+      msg.textContent='변경 실패: '+(err.message||'다시 로그인한 뒤 시도해주세요.');
+      msg.className='error';
+      adminNotice('비밀번호를 변경하지 못했습니다: '+(err.message||'다시 시도해주세요.'),true);
+    }finally{
+      btn.disabled=false;
+      btn.textContent='비밀번호 변경';
+    }
+  });
+})();
