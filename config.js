@@ -1,7 +1,7 @@
 window.WHENG_CONFIG = {
   supabaseUrl: 'https://bcjhwlqvytphupxpzjlj.supabase.co',
   supabasePublishableKey: 'sb_publishable_uPxC7lYV8hxyMP9Q0T5z_Q_BCTc6LUE',
-  adminEmail: 'admin@wheng.local',
+  adminEmail: 'solbi081@naver.com',
   phoneDisplay: '010-2239-1118',
   phoneTel: '01022391118',
   kakaoUrl: 'https://pf.kakao.com/_sxorrX/chat',
