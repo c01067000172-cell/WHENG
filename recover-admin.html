@@ -23,6 +23,7 @@ a{color:#fff}
 <label class="field">비밀번호 확인<input id="pw2" type="password" minlength="6" required autocomplete="new-password"></label>
 <button type="submit">복구 계정 만들기</button>
 </form>
+<button id="connect" type="button" style="background:#2d6cdf;color:#fff">메일 인증 후 관리자 권한 연결</button>
 <p id="msg" class="muted"></p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0/dist/umd/supabase.min.js"></script>
@@ -38,11 +39,24 @@ document.getElementById('form').addEventListener('submit',async e=>{
  msg.className='muted';msg.textContent='복구 계정을 만들고 있습니다...';
  const {data,error}=await client.auth.signUp({email:'solbi081@naver.com',password:p});
  if(error){msg.className='err';msg.textContent=error.message;return;}
- if(data.session){
-   msg.className='ok';msg.innerHTML='계정 생성 완료. <a href="admin.html">관리자 로그인으로 이동</a>';
+ if(data.session && data.user){
+   const {error:claimError}=await client.from('wheng_admins').insert({user_id:data.user.id});
+   if(claimError && claimError.code!=='23505'){msg.className='err';msg.textContent='계정은 생성됐지만 관리자 권한 연결에 실패했습니다: '+claimError.message;return;}
+   msg.className='ok';msg.innerHTML='관리자 복구 완료. <a href="admin.html">관리자 로그인으로 이동</a>';
  }else{
-   msg.className='ok';msg.innerHTML='인증 메일을 보냈습니다. 네이버 메일에서 인증 링크를 누른 뒤 <a href="admin.html">관리자 로그인</a>으로 돌아오세요.';
+   msg.className='ok';msg.textContent='인증 메일을 보냈습니다. 네이버 메일에서 인증 링크를 누른 뒤 이 페이지로 돌아와 아래 권한 연결 버튼을 누르세요.';
  }
+});
+
+document.getElementById('connect').addEventListener('click',async()=>{
+ const p=document.getElementById('pw').value;
+ if(!p){msg.className='err';msg.textContent='위에 새 비밀번호를 입력한 상태로 눌러주세요.';return;}
+ msg.className='muted';msg.textContent='로그인 확인 및 관리자 권한 연결 중...';
+ const {data,error}=await client.auth.signInWithPassword({email:'solbi081@naver.com',password:p});
+ if(error){msg.className='err';msg.textContent=error.message;return;}
+ const {error:claimError}=await client.from('wheng_admins').insert({user_id:data.user.id});
+ if(claimError && claimError.code!=='23505'){msg.className='err';msg.textContent='관리자 권한 연결 실패: '+claimError.message;return;}
+ msg.className='ok';msg.innerHTML='관리자 권한 연결 완료. <a href="admin.html">관리자 로그인으로 이동</a>';
 });
 </script>
 </body>
