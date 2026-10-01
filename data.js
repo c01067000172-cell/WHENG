@@ -102,9 +102,26 @@
       throw new Error('데모 로그인: admin@wheng.local / 1234');
     }
     const {data,error}=await remote.auth.signInWithPassword({email,password}); if(error) throw error;
-    const {data:adminRow,error:adminErr}=await remote.from('wheng_admins').select('user_id').eq('user_id',data.user.id).maybeSingle();
+    let {data:adminRow,error:adminErr}=await remote.from('wheng_admins').select('user_id').eq('user_id',data.user.id).maybeSingle();
+    if((adminErr || !adminRow) && String(data.user.email||'').toLowerCase()===String(cfg.adminEmail||'').toLowerCase()){
+      const {error:claimErr}=await remote.from('wheng_admins').insert({user_id:data.user.id});
+      if(!claimErr || claimErr.code==='23505'){
+        adminRow={user_id:data.user.id}; adminErr=null;
+      }
+    }
     if(adminErr || !adminRow){ await remote.auth.signOut(); throw new Error('WHENG 관리자 권한이 없습니다.'); }
     return data;
+  }
+
+  async function registerRecoveryAdmin(email,password){
+    if(!remote) throw new Error('Supabase 연결 후 사용할 수 있습니다.');
+    const {data,error}=await remote.auth.signUp({email,password});
+    if(error) throw error;
+    if(data.session && data.user){
+      const {error:claimErr}=await remote.from('wheng_admins').insert({user_id:data.user.id});
+      if(claimErr && claimErr.code!=='23505') throw claimErr;
+    }
+    return {needsEmailConfirmation:!data.session,user:data.user};
   }
 
   async function bootstrapAdmin(email,password,token){
@@ -126,7 +143,11 @@
     if(!remote){ return sessionStorage.getItem('wheng_demo_admin') ? {user:{email:'admin@wheng.local'}} : null; }
     const {data,error}=await remote.auth.getSession(); if(error) throw error;
     const session=data.session; if(!session) return null;
-    const {data:adminRow,error:adminErr}=await remote.from('wheng_admins').select('user_id').eq('user_id',session.user.id).maybeSingle();
+    let {data:adminRow,error:adminErr}=await remote.from('wheng_admins').select('user_id').eq('user_id',session.user.id).maybeSingle();
+    if((adminErr || !adminRow) && String(session.user.email||'').toLowerCase()===String(cfg.adminEmail||'').toLowerCase()){
+      const {error:claimErr}=await remote.from('wheng_admins').insert({user_id:session.user.id});
+      if(!claimErr || claimErr.code==='23505'){ adminRow={user_id:session.user.id}; adminErr=null; }
+    }
     if(adminErr || !adminRow) return null;
     return session;
   }
@@ -235,7 +256,7 @@
     const {data,error}=await remote.from('wheng_quote_photos').select('*').eq('quote_id',quoteId); if(error) throw error; return data;
   }
 
-  window.WHENG_DATA={mode:remote?'supabase':'demo',remote,getServices,getCases,createQuote,signIn,bootstrapAdmin,signOut,getSession,setDemoSession,getQuotes,updateQuote,deleteQuote,saveService,deleteService,saveCase,updateCaseBlog,deleteCase,getPhotoSignedUrl,getQuotePhotos,uploadCaseImage,blogDraftForCase};
+  window.WHENG_DATA={mode:remote?'supabase':'demo',remote,getServices,getCases,createQuote,signIn,registerRecoveryAdmin,bootstrapAdmin,signOut,getSession,setDemoSession,getQuotes,updateQuote,deleteQuote,saveService,deleteService,saveCase,updateCaseBlog,deleteCase,getPhotoSignedUrl,getQuotePhotos,uploadCaseImage,blogDraftForCase};
   // A configured production site must never report browser-only demo submissions as received.
   if((cfg.supabaseUrl || cfg.supabasePublishableKey) && !remote){
     window.WHENG_DATA.mode='unavailable';
