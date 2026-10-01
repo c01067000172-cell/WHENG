@@ -164,29 +164,29 @@ function addPromotionButtons(){
 
       const accountCheck=document.createElement('a');accountCheck.className='btn btn-light full';accountCheck.target='_blank';accountCheck.rel='noopener noreferrer';
       accountCheck.href=naverBlogHomeUrl();accountCheck.textContent='1. solbi081 블로그 확인';body.append(accountCheck);
-      const warning=document.createElement('div');warning.className='notice';warning.textContent='이제 자동 입력은 시공 사진과 WHENG 공식 사이트 링크만 넣습니다. 제목과 본문은 건드리지 않습니다.';body.append(warning);
+
+      const warning=document.createElement('div');warning.className='notice';
+      warning.textContent='네이버의 외부 블로그 글쓰기 API는 종료되어 자동 발행은 지원되지 않습니다. WHENG에서는 제목·본문·사진을 준비하고 네이버 공식 블로그 공유창을 여는 방식으로 연결합니다.';
+      body.append(warning);
 
       const copyTitle=document.createElement('button');copyTitle.className='btn btn-light full';copyTitle.type='button';copyTitle.textContent='2. 제목 복사';
       copyTitle.onclick=async()=>{try{await navigator.clipboard.writeText(titleInput.value);adminNotice('블로그 제목을 복사했습니다.')}catch{titleInput.focus();titleInput.select();adminNotice('제목을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
       body.append(copyTitle);
 
+      const copyBody=document.createElement('button');copyBody.className='btn btn-light full';copyBody.type='button';copyBody.textContent='3. 본문 전체 복사';
+      copyBody.onclick=async()=>{try{await navigator.clipboard.writeText(text.value);adminNotice('블로그 본문 전체를 복사했습니다.')}catch{text.focus();text.select();adminNotice('본문을 선택했습니다. Ctrl+C로 복사해주세요.',true)}};
+      body.append(copyBody);
+
       const publish=document.createElement('button');publish.className='btn btn-primary full';publish.type='button';
-      publish.textContent='3. 시공사진 + 사이트 링크만 네이버에 넣기';
-      publish.onclick=async()=>{
-        const payload={
-          v:2,
-          siteUrl:whengSiteUrl(),
-          imageUrl:String(x.image_url||'').trim(),
-          caseId:String(x.id||''),
-          createdAt:Date.now()
-        };
-        const helperUrl=new URL('naver-helper.html',location.href);
-        helperUrl.hash='wheng='+encodeWhengPayload(payload);
-        const opened=window.open(helperUrl.href,'_blank');
+      publish.textContent='4. 본문 복사 + 네이버 블로그 공유창 열기';
+      publish.onclick=()=>{
+        navigator.clipboard.writeText(text.value).then(
+          ()=>adminNotice('본문을 복사했습니다. 네이버 창에서 본문에 붙여넣고 사진을 확인한 뒤 발행해주세요.'),
+          ()=>adminNotice('네이버 공유창을 열었습니다. 본문 복사가 안 되면 3번 버튼으로 복사해주세요.',true)
+        );
+        const opened=window.open(naverShareUrl(titleInput.value),'_blank','width=1100,height=900,noopener,noreferrer');
         if(!opened){
-          adminNotice('새 창이 차단되었습니다. 브라우저 주소창 오른쪽의 팝업 차단 아이콘에서 wheng.onrender.com을 허용해주세요.',true);
-        }else{
-          adminNotice('네이버 글쓰기 화면을 열었습니다. 시공사진과 WHENG 사이트 링크만 자동으로 넣습니다.');
+          adminNotice('새 창이 차단되었습니다. 브라우저의 팝업 차단을 허용한 뒤 다시 눌러주세요.',true);
         }
       };
       body.append(publish);
